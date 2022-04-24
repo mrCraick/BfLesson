@@ -8,41 +8,36 @@
         _memory = new char[30000];
 
         string program =
-            "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+++++++++++++++++++++++++++++.+++++++..+++.-------------------------------------------------------------------------------.+++++++++++++++++++++++++++++++++++++++++++++++++++++++.++++++++++++++++++++++++.+++.------.--------.-------------------------------------------------------------------.-----------------------.";
+            "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
 
         foreach (var item in program)
         {
-            if (item == '+')
+            switch (item)
             {
-                NextCharValue();
-            }
-            if (item == '-')
-            {
-                PreviousCharValue();
-            }
-            if (item == '.')
-            {
-                DisplayCellValue();
-            }
-            if (item == '>')
-            {
-                NextCell();
-            }
-            if (item == '<')
-            {
-                PreviusCell();
-            }
-            if (item == ',')
-            {
-                InputValueInCell();
-            }
-            if (item == '[')
-            {
-                IfZeroNext();
-            }
-            if (item == ']')
-            {
-                IfNoZeroBack();
+                case '+':
+                    NextCharValue();
+                    break;
+                case '-':
+                    PreviousCharValue();
+                    break;
+                case '.':
+                    DisplayCellValue();
+                    break;
+                case '>':
+                    NextCell();
+                    break;
+                case '<':
+                    PreviusCell();
+                    break;
+                case ',':
+                    InputValueInCell();
+                    break;
+                case '[':
+                    IfZeroNext(item);
+                    break;
+                case ']':
+                    IfNoZeroBack(item);
+                    break;
             }
         }
 
@@ -75,19 +70,53 @@
         _memory[_current] = Convert.ToChar(Console.ReadLine());
     }
 
-    public static void IfZeroNext()
+    /// <summary>
+    /// если значение текущей ячейки ноль,
+    /// перейти вперёд по тексту программы на ячейку, следующую за соответствующей ] (с учётом вложенности)
+    /// </summary>
+    public static void IfZeroNext(char item)
     {
-        while (_memory[_current] == 0)
+        if (_memory[_current] == 0)
         {
-            _current++;
+            int NumberOfopenBrackets = 1;
+            while (NumberOfopenBrackets != 0)
+            {
+                _current++;
+                if (item == '[')
+                {
+                    NumberOfopenBrackets++;
+                }
+                if (item == ']')
+                {
+                    NumberOfopenBrackets--;
+                }
+            }
         }
     }
 
-    public static void IfNoZeroBack()
+
+
+    public static void IfNoZeroBack(char item)
     {
-        while (_memory[_current] != 0)
+        if (_memory[_current] != 0)
         {
-            _current--;
+            int NumberOfCloseBrackets = 1;
+            {
+                while (NumberOfCloseBrackets != 0)
+                {
+                    _current--;
+                    if (item == ']')
+                    { 
+                        NumberOfCloseBrackets++;
+                    }
+                    if (item == '[')
+                    { 
+                        NumberOfCloseBrackets--;
+                    }
+                }
+                
+            }
         }
+
     }
 }
