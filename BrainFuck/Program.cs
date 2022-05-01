@@ -16,8 +16,9 @@ public class Repository
     public char[] _memory = new char[30000];
     public int _current = 0;
     //
-    public string program = "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+++++++++++++++++++++++++++++.+++++++..+++.-------------------------------------------------------------------------------.+++++++++++++++++++++++++++++++++++++++++++++++++++++++.++++++++++++++++++++++++.+++.------.--------.-------------------------------------------------------------------.----------------------*/ -.";
-    //"++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
+    public string program = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
+   
+    //"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+++++++++++++++++++++++++++++.+++++++..+++.-------------------------------------------------------------------------------.+++++++++++++++++++++++++++++++++++++++++++++++++++++++.++++++++++++++++++++++++.+++.------.--------.-------------------------------------------------------------------.----------------------*/ -.";
 }
 
 public class DataOperations : Repository
@@ -48,10 +49,10 @@ public class DataOperations : Repository
                     InputValueInCell();
                     break;
                 case '[':
-                    IfZeroNext(i, BrainFuckCode);
+                    i = IfZeroNext(i, BrainFuckCode);
                     break;
                 case ']':
-                    IfNoZeroBack(i, BrainFuckCode);
+                    i = IfNoZeroBack(i, BrainFuckCode);
                     break;
             }
         }
@@ -83,14 +84,13 @@ public class DataOperations : Repository
     {
         _memory[_current] = Convert.ToChar(Console.ReadLine()); 
     }
-    public void IfZeroNext(int PositionNumber, string BrainFuckCode)
+    public int IfZeroNext(int PositionNumber, string BrainFuckCode)
     {
         if (_memory[_current] == 0)
         {
             int NumberOfopenBrackets = 1;
             while (NumberOfopenBrackets != 0)
             {
-                _current++;
                 PositionNumber++;
                 if (BrainFuckCode[PositionNumber] == '[')
                 {
@@ -102,14 +102,15 @@ public class DataOperations : Repository
                 }
             }
         }
+        return PositionNumber + 1;
     }
-    public void IfNoZeroBack(int PositionNumber, string BrainFuckCode)
+    public int IfNoZeroBack(int PositionNumber, string BrainFuckCode)
     {
         if (_memory[_current] != 0)
         {
-            int NumberOfopenBrackets = 1; while (NumberOfopenBrackets != 0)
+            int NumberOfopenBrackets = 1; 
+            while (NumberOfopenBrackets != 0)
             {
-                _current--;
                 PositionNumber--;
                 if (BrainFuckCode[PositionNumber] == ']')
                 {
@@ -122,5 +123,6 @@ public class DataOperations : Repository
 
             }
         }
+        return PositionNumber-1;
     }
 }
