@@ -1,18 +1,33 @@
 ﻿public static class Program
 {
-    private static char[] _memory;
-    private static int _current = 0;
+
 
     public static void Main()
     {
-        _memory = new char[30000];
+        Repository BrainFuckCode = new Repository();
+        DataOperations dataOperations = new DataOperations();
+        dataOperations.enumСodeBrainFuck(BrainFuckCode.program);
 
-        string program =
-            "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
+    }
+}
 
-        foreach (var item in program)
+public class Repository
+{
+    public char[] _memory = new char[30000];
+    public int _current = 0;
+    //
+    public string program = "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+++++++++++++++++++++++++++++.+++++++..+++.-------------------------------------------------------------------------------.+++++++++++++++++++++++++++++++++++++++++++++++++++++++.++++++++++++++++++++++++.+++.------.--------.-------------------------------------------------------------------.----------------------*/ -.";
+    //"++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
+}
+
+public class DataOperations : Repository
+{
+
+    public void enumСodeBrainFuck(string BrainFuckCode)
+    {
+        for (int i = 0; i < BrainFuckCode.Length; i++)
         {
-            switch (item)
+            switch (BrainFuckCode[i])
             {
                 case '+':
                     NextCharValue();
@@ -33,48 +48,42 @@
                     InputValueInCell();
                     break;
                 case '[':
-                    IfZeroNext(item);
+                    IfZeroNext(i, BrainFuckCode);
                     break;
                 case ']':
-                    IfNoZeroBack(item);
+                    IfNoZeroBack(i, BrainFuckCode);
                     break;
             }
         }
-
     }
-
-    public static void NextCharValue()
+    public void NextCharValue()
     {
         _memory[_current]++;
     }
 
-    public static void PreviousCharValue()
+    public void PreviousCharValue()
     {
         _memory[_current]--;
     }
-    public static void DisplayCellValue()
+    public void DisplayCellValue()
     {
         Console.Write(_memory[_current]);
     }
-    public static void NextCell()
+    public void NextCell()
     {
         _current++;
     }
-    public static void PreviusCell()
+    public void PreviusCell()
     {
         _current--;
     }
+    public void InputValueInCell()
+    // сделать ввод массива чаров - Так, стоп, а нахрена? Если у нас прием значения для одной ячейки, а не массива?
 
-    public static void InputValueInCell()
     {
-        _memory[_current] = Convert.ToChar(Console.ReadLine());
+        _memory[_current] = Convert.ToChar(Console.ReadLine()); 
     }
-
-    /// <summary>
-    /// если значение текущей ячейки ноль,
-    /// перейти вперёд по тексту программы на ячейку, следующую за соответствующей ] (с учётом вложенности)
-    /// </summary>
-    public static void IfZeroNext(char item)
+    public void IfZeroNext(int PositionNumber, string BrainFuckCode)
     {
         if (_memory[_current] == 0)
         {
@@ -82,41 +91,36 @@
             while (NumberOfopenBrackets != 0)
             {
                 _current++;
-                if (item == '[')
+                PositionNumber++;
+                if (BrainFuckCode[PositionNumber] == '[')
                 {
                     NumberOfopenBrackets++;
                 }
-                if (item == ']')
+                if (BrainFuckCode[PositionNumber] == ']')
                 {
                     NumberOfopenBrackets--;
                 }
             }
         }
     }
-
-
-
-    public static void IfNoZeroBack(char item)
+    public void IfNoZeroBack(int PositionNumber, string BrainFuckCode)
     {
         if (_memory[_current] != 0)
         {
-            int NumberOfCloseBrackets = 1;
+            int NumberOfopenBrackets = 1; while (NumberOfopenBrackets != 0)
             {
-                while (NumberOfCloseBrackets != 0)
+                _current--;
+                PositionNumber--;
+                if (BrainFuckCode[PositionNumber] == ']')
                 {
-                    _current--;
-                    if (item == ']')
-                    { 
-                        NumberOfCloseBrackets++;
-                    }
-                    if (item == '[')
-                    { 
-                        NumberOfCloseBrackets--;
-                    }
+                    NumberOfopenBrackets++;
                 }
-                
+                if (BrainFuckCode[PositionNumber] == '[')
+                {
+                    NumberOfopenBrackets--;
+                }
+
             }
         }
-
     }
 }
