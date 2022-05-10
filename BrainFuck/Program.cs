@@ -3,7 +3,7 @@
     public static void Main()
     {
         Repository BrainFuckCode = new Repository();
-        DataOperations dataOperations = new DataOperations();
+        DataOperations dataOperations = new DataOperations(BrainFuckCode, new InputOutput()) ;
         dataOperations.enumСodeBrainFuck(BrainFuckCode.Program);
 
     }
@@ -11,9 +11,6 @@
 
 public class Repository
 {
-    private char[] _memory;
-    private int _current;
-    private string _program;
     public char[] Memory { get; set; }
     public int Current { get; set; }
     public string Program { get; set; }
@@ -27,8 +24,16 @@ public class Repository
 }
 public class DataOperations
 {
-    Repository dataFromRepository = new Repository();
-    InputOutput inputOutput = new InputOutput();
+    private Repository _dataFromRepository = new Repository();
+    private InputOutput _inputOutput = new InputOutput();
+
+    public DataOperations(
+        Repository dataFromRepository,
+        InputOutput inputOutput)
+    {
+        _dataFromRepository = dataFromRepository;
+        _inputOutput = inputOutput;
+    }
     public void enumСodeBrainFuck(string BrainFuckCode)
     {
         for (int i = 0; i < BrainFuckCode.Length; i++)
@@ -64,7 +69,7 @@ public class DataOperations
     }
     public void NextCharValue()
     {
-        dataFromRepository.Memory[dataFromRepository.Current]++;
+        _dataFromRepository.Memory[_dataFromRepository.Current]++;
       // так не рабит нихуя
       //dataFromRepository.Memory[dataFromRepository.Current] = Convert.ToChar(Convert.ToInt32(dataFromRepository.Memory[dataFromRepository.Current]) + 1);
     }
@@ -72,38 +77,38 @@ public class DataOperations
     public void PreviousCharValue()
     {
 
-        dataFromRepository.Memory[dataFromRepository.Current]--;
+        _dataFromRepository.Memory[_dataFromRepository.Current]--;
         // так не рабит нихуя
         // dataFromRepository.Memory[dataFromRepository.Current] = Convert.ToChar(Convert.ToInt32(dataFromRepository.Memory[dataFromRepository.Current]) - 1);
 
     }
     public void DisplayCellValue()
     {
-        inputOutput.OutputConsole(Convert.ToString(dataFromRepository.Memory[dataFromRepository.Current]));
+        _inputOutput.OutputConsole(Convert.ToString(_dataFromRepository.Memory[_dataFromRepository.Current]));
     }
     public void NextCell()
     {
-        if (dataFromRepository.Current<dataFromRepository.Memory.Length)
+        if (_dataFromRepository.Current<_dataFromRepository.Memory.Length)
         {
-            dataFromRepository.Current = dataFromRepository.Current + 1;
+            _dataFromRepository.Current = _dataFromRepository.Current + 1;
         }
         
     }
     public void PreviusCell()
     {
-        if (dataFromRepository.Current>0)
+        if (_dataFromRepository.Current>0)
         {
-            dataFromRepository.Current = dataFromRepository.Current - 1;
+            _dataFromRepository.Current = _dataFromRepository.Current - 1;
         }
         
     }
     public void InputValueInCell()
     {
-        dataFromRepository.Memory[dataFromRepository.Current] = inputOutput.GetCharUser();
+        _dataFromRepository.Memory[_dataFromRepository.Current] = _inputOutput.GetCharUser();
     }
     public int IfZeroNext(int PositionNumber, string BrainFuckCode)
     {
-        if (dataFromRepository.Memory[dataFromRepository.Current] == 0)
+        if (_dataFromRepository.Memory[_dataFromRepository.Current] == 0)
         {
             int NumberOfopenBrackets = 1;
             while (NumberOfopenBrackets != 0)
@@ -123,7 +128,7 @@ public class DataOperations
     }
     public int IfNoZeroBack(int PositionNumber, string BrainFuckCode)
     {
-        if (dataFromRepository.Memory[dataFromRepository.Current] != 0)
+        if (_dataFromRepository.Memory[_dataFromRepository.Current] != 0)
         {
             int NumberOfopenBrackets = 1;
             while (NumberOfopenBrackets != 0)
