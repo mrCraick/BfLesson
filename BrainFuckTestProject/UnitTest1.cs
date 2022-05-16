@@ -1,3 +1,5 @@
+using System.IO;
+using System.Text;
 using Xunit;
 // AAA RULE
 
@@ -15,7 +17,9 @@ namespace BrainFuckTestProject
         {
             // arrange
             var repository = new Repository();
-            var inputOutput = new InputOutput();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
 
             var expectedCurrent1 = repository.Current + 1;
@@ -41,7 +45,9 @@ namespace BrainFuckTestProject
         {
             // arrange
             var repository = new Repository();
-            var inputOutput = new InputOutput();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
 
             var expectedCurrent1 = repository.Current;
@@ -67,7 +73,9 @@ namespace BrainFuckTestProject
         {
             // arrange
             var repository = new Repository();
-            var inputOutput = new InputOutput();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
 
             var expectedCurrent1 = (char)1;
@@ -87,7 +95,9 @@ namespace BrainFuckTestProject
         {
             // arrange
             var repository = new Repository();
-            var inputOutput = new InputOutput();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
 
             repository.Memory[repository.Current] = (char)(repository.Memory[repository.Current] + 1); 
@@ -108,15 +118,17 @@ namespace BrainFuckTestProject
         {
             // arrange
             var repository = new Repository();
-            var inputOutput = new InputOutput();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
             repository.Memory[repository.Current] = (char)0;
             repository.Program = "[++++[++++++++]+++++++]";
-            var expectedCurrent1 = 23;
+            var expectedCurrent1 = 22;
             var PositionNumber = 0;
             // act
-            dataOperations.IfZeroNext(PositionNumber, repository.Program);
-            var actual1 = PositionNumber;
+            
+            var actual1 = dataOperations.IfZeroNext(PositionNumber, repository.Program);
             // assert
             Assert.Equal(expectedCurrent1, actual1);
 
@@ -127,7 +139,9 @@ namespace BrainFuckTestProject
         {
             // arrange
             var repository = new Repository();
-            var inputOutput = new InputOutput();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
             repository.Memory[repository.Current] = (char)1;
             repository.Program = "[++++[++++++++]+++++++]";
@@ -135,16 +149,123 @@ namespace BrainFuckTestProject
             var PositionNumber = 22;
 
             // act
-            dataOperations.IfNoZeroBack(PositionNumber, repository.Program);
-            var actual1 = PositionNumber;
+            
+            var actual1 = dataOperations.IfNoZeroBack(PositionNumber, repository.Program);
 
             // assert
             Assert.Equal(expectedCurrent1, actual1);
         }
 
-    }
+        [Fact]
 
+        public void DisplayCellValueTest()
+        {
+            // arrange
+            var repository = new Repository();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
+            var dataOperations = new DataOperations(repository,inputOutput);
+
+            repository.Memory[0] = '{';
+            var expectedCurrent = "{";
+            // act
+            dataOperations.DisplayCellValue();
+            var actual = testTextWriter.OutputHeh;
+
+            // assert
+            Assert.Equal(expectedCurrent, actual);
+
+        }
+
+        [Fact]
+
+        public void InputValueInCellTest()
+        {
+            // arrange
+            var repository = new Repository();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
+            var dataOperations = new DataOperations(repository, inputOutput);
+            repository.Memory[0] = '}';
+            var expectedCurrent = "}";
+
+            // act
+
+            dataOperations.InputValueInCell();
+            var actual = testTextReader.InputHeh;
+            // assert
+            Assert.Equal(expectedCurrent, actual);
+
+        }
+
+        //public void enumСodeBrainFuckTest()
+
+        //{
+        //    // arrange
+        //    var repository = new Repository();
+        //    var testTextWriter = new TestTextWriter();
+        //    var testTextReader = new TestTextReader();
+        //    var inputOutput = new InputOutput(testTextReader, testTextWriter);
+        //    var dataOperations = new DataOperations(repository, inputOutput);
+        //    var brainFuckCode = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
+        //    var expectedCurrent = "Hello World!";
+
+        //    // act
+        //    dataOperations.enumСodeBrainFuck(brainFuckCode);
+        //    var actual = testTextWriter.OutputHeh;
+
+        //    // assert
+        //    Assert.Equal(expectedCurrent, actual);
+        //}
+
+
+
+
+        public class TestTextReader : TextReader
+        {
+            private string _input;
+
+            public string InputHeh => _input;
+
+            public TestTextReader(string input)
+            {
+                _input = input;
+            }
+            public TestTextReader()
+            { 
+            }
+            public string Read()
+            {
+                return _input;
+            }
+        }
+
+        public class TestTextWriter : TextWriter
+        {
+            private string _output;
+
+            public string OutputHeh => _output;
+            
+            public TestTextWriter(string output)
+            {
+                _output = output;
+
+            }
+            public TestTextWriter()
+            {
+
+            }
+            public override Encoding Encoding => Encoding.UTF8;
+
+            public override void Write(string output)
+            {
+                _output = output;
+            }
+        }
+
+    }
+    
 }
-    // написать тест на каждую функцию в этом DataOperations
-    // придумать как затестить InputOutput
-//}
+       // тест на ввод и тест на ENUM (на енвм 6 тестов)

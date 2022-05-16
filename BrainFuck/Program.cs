@@ -3,7 +3,7 @@
     public static void Main()
     {
         Repository BrainFuckCode = new Repository();
-        DataOperations dataOperations = new DataOperations(BrainFuckCode, new InputOutput()) ;
+        DataOperations dataOperations = new DataOperations(BrainFuckCode, new InputOutput(Console.In, Console.Out)) ;
         dataOperations.enumСodeBrainFuck(BrainFuckCode.Program);
 
     }
@@ -25,7 +25,9 @@ public class Repository
 public class DataOperations
 {
     private Repository _dataFromRepository = new Repository();
-    private InputOutput _inputOutput = new InputOutput();
+    private InputOutput _inputOutput = new InputOutput(Console.In, Console.Out);
+
+
 
     public DataOperations(
         Repository dataFromRepository,
@@ -67,14 +69,14 @@ public class DataOperations
             }
         }
     }
-    public void NextCharValue()
+    public void NextCharValue() //тест есть
     {
         _dataFromRepository.Memory[_dataFromRepository.Current]++;
       // так не рабит нихуя
       //dataFromRepository.Memory[dataFromRepository.Current] = Convert.ToChar(Convert.ToInt32(dataFromRepository.Memory[dataFromRepository.Current]) + 1);
     }
 
-    public void PreviousCharValue()
+    public void PreviousCharValue() // тест есть
     {
 
         _dataFromRepository.Memory[_dataFromRepository.Current]--;
@@ -82,11 +84,11 @@ public class DataOperations
         // dataFromRepository.Memory[dataFromRepository.Current] = Convert.ToChar(Convert.ToInt32(dataFromRepository.Memory[dataFromRepository.Current]) - 1);
 
     }
-    public void DisplayCellValue()
+    public void DisplayCellValue() //тест есть 
     {
         _inputOutput.OutputConsole(Convert.ToString(_dataFromRepository.Memory[_dataFromRepository.Current]));
     }
-    public void NextCell()
+    public void NextCell() //тест есть 
     {
         if (_dataFromRepository.Current<_dataFromRepository.Memory.Length)
         {
@@ -94,7 +96,7 @@ public class DataOperations
         }
         
     }
-    public void PreviusCell()
+    public void PreviusCell() // тест есть 
     {
         if (_dataFromRepository.Current>0)
         {
@@ -106,7 +108,7 @@ public class DataOperations
     {
         _dataFromRepository.Memory[_dataFromRepository.Current] = _inputOutput.GetCharUser();
     }
-    public int IfZeroNext(int PositionNumber, string BrainFuckCode)
+    public int IfZeroNext(int PositionNumber, string BrainFuckCode) //тест есть
     {
         if (_dataFromRepository.Memory[_dataFromRepository.Current] == 0)
         {
@@ -124,9 +126,9 @@ public class DataOperations
                 }
             }
         }
-        return PositionNumber + 1;
+        return PositionNumber;
     }
-    public int IfNoZeroBack(int PositionNumber, string BrainFuckCode)
+    public int IfNoZeroBack(int PositionNumber, string BrainFuckCode) //тест есть
     {
         if (_dataFromRepository.Memory[_dataFromRepository.Current] != 0)
         {
@@ -145,7 +147,7 @@ public class DataOperations
 
             }
         }
-        return PositionNumber - 1;
+        return PositionNumber;
     }
 
     
@@ -153,7 +155,17 @@ public class DataOperations
 
 public class InputOutput
 {
-    public char GetCharUser()
+    private TextReader Reader;
+    private TextWriter Writer;
+
+    public  InputOutput (TextReader output, TextWriter input)
+    { 
+       Reader = output;
+       Writer = input;
+        
+    }
+
+public char GetCharUser()
     {
         while (true)
         {
@@ -162,20 +174,19 @@ public class InputOutput
             {
                 return result;
             }
-            // А так можно?
-            //if (char.TryParse(GetStringUser(), out char result))
-            //{
-            //    return result;
-            //}
         }
+
     }
+
     public string GetStringUser()
     {
-        return Console.ReadLine();
+
+        return Reader.ReadLine();
     }
     public void OutputConsole(string messageOrChar)
     {
-        Console.WriteLine(messageOrChar);
+        Writer.Write(messageOrChar);
     }
 
 }
+
