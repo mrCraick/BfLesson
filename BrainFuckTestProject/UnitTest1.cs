@@ -10,6 +10,14 @@ namespace BrainFuckTestProject
 {
     public class DataOperationTest
     {
+        public DataOperationTest()
+        {
+            Repository repository = new Repository();
+            TestTextWriter testTextWriter = new TestTextWriter();
+            TestTextReader testTextReader = new TestTextReader();
+            InputOutput inputOutput = new InputOutput(testTextReader, testTextWriter);
+            DataOperations dataOperations = new DataOperations(repository, inputOutput);
+        }
         [Fact] //атрибут утверждение, что должно отработать без ошибок
 
 
@@ -180,12 +188,12 @@ namespace BrainFuckTestProject
 
         [Fact]
 
-        public void InputValueInCellTest()
+        public void InputValueInCellTest() 
         {
             // arrange
             var repository = new Repository();
             var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader();
+            var testTextReader = new TestTextReader("H");
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
             repository.Memory[0] = '}';
@@ -194,34 +202,94 @@ namespace BrainFuckTestProject
             // act
 
             dataOperations.InputValueInCell();
-            var actual = testTextReader.InputHeh;
+            //var actual = testTextReader.InputHeh;
+            var actual = repository.Memory[0];
             // assert
-            Assert.Equal(expectedCurrent, actual);
+
+            Assert.Equal(expectedCurrent[0], actual);
 
         }
 
-        //public void enumСodeBrainFuckTest()
+        public void enumСodeBrainFuckTest()
+        {
+            // arrange
+            
+        var repository = new Repository();
+        var testTextWriter = new TestTextWriter();
+        var testTextReader = new TestTextReader();
+        var inputOutput = new InputOutput(testTextReader, testTextWriter);
+        var dataOperations = new DataOperations(repository, inputOutput);
+        var testDataOperations = new TestDataOperations(Repository repository, InputOutput inputOutput);
+        var brainFuckCode = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
+        var expectedCurrent1 = 1;
+        var expectedCurrent2 = 1;
+        var expectedCurrent3 = 1;
+        var expectedCurrent4 = 1;
+        var expectedCurrent5 = 1;
+        var expectedCurrent6 = 1;
+        var expectedCurrent7 = 1;
+        var expectedCurrent8 = 1;
 
-        //{
-        //    // arrange
-        //    var repository = new Repository();
-        //    var testTextWriter = new TestTextWriter();
-        //    var testTextReader = new TestTextReader();
-        //    var inputOutput = new InputOutput(testTextReader, testTextWriter);
-        //    var dataOperations = new DataOperations(repository, inputOutput);
-        //    var brainFuckCode = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
-        //    var expectedCurrent = "Hello World!";
+            // act
+        dataOperations.enumСodeBrainFuck(brainFuckCode);
+        var actual = testTextWriter.OutputHeh;
 
-        //    // act
-        //    dataOperations.enumСodeBrainFuck(brainFuckCode);
-        //    var actual = testTextWriter.OutputHeh;
-
-        //    // assert
-        //    Assert.Equal(expectedCurrent, actual);
-        //}
+        // assert
+        Assert.Equal(expectedCurrent, actual);
+        }
 
 
 
+
+    public class TestDataOperations : DataOperations
+        {
+            private string _result = 1;
+            
+            public string Result => _result;
+
+
+            public TestDataOperations(Repository dataFromRepository,
+        InputOutput inputOutput)
+                :base(dataFromRepository, inputOutput)
+            {
+                
+            }
+            public override void NextCharValue()
+            {
+                
+            }
+            public override void PreviousCharValue()
+            {
+
+            }
+            public override void DisplayCellValue()
+            {
+
+            }
+            public override void NextCell()
+            {
+
+            }
+            public override void PreviusCell()
+            {
+
+            }
+            public override void InputValueInCell()
+            {
+
+            }
+            public override int IfZeroNext(int PositionNumber, string BrainFuckCode)
+            {
+                return 1;
+            }
+            public override int IfNoZeroBack(int PositionNumber, string BrainFuckCode)
+            {
+
+                return 1;
+            }
+
+
+        }
 
         public class TestTextReader : TextReader
         {
@@ -235,8 +303,9 @@ namespace BrainFuckTestProject
             }
             public TestTextReader()
             { 
+               
             }
-            public string Read()
+            public override string ReadLine()
             {
                 return _input;
             }
@@ -246,18 +315,18 @@ namespace BrainFuckTestProject
         {
             private string _output;
 
-            public string OutputHeh => _output;
+            public string OutputHeh => _output; 
             
             public TestTextWriter(string output)
             {
                 _output = output;
 
             }
-            public TestTextWriter()
+            public TestTextWriter() // конструктор, который позволяет создать экземпляр класса без агрумента
             {
 
             }
-            public override Encoding Encoding => Encoding.UTF8;
+            public override Encoding Encoding => Encoding.UTF8; //позволяет врайтеру понять что написать
 
             public override void Write(string output)
             {

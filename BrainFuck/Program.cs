@@ -4,7 +4,7 @@
     {
         Repository BrainFuckCode = new Repository();
         DataOperations dataOperations = new DataOperations(BrainFuckCode, new InputOutput(Console.In, Console.Out)) ;
-        dataOperations.enumСodeBrainFuck(BrainFuckCode.Program);
+        dataOperations.EnumСodeBrainFuck(BrainFuckCode.Program);
 
     }
 }
@@ -24,8 +24,8 @@ public class Repository
 }
 public class DataOperations
 {
-    private Repository _dataFromRepository = new Repository();
-    private InputOutput _inputOutput = new InputOutput(Console.In, Console.Out);
+    private Repository _dataFromRepository;
+    private InputOutput _inputOutput;
 
 
 
@@ -36,7 +36,10 @@ public class DataOperations
         _dataFromRepository = dataFromRepository;
         _inputOutput = inputOutput;
     }
-    public void enumСodeBrainFuck(string BrainFuckCode)
+    public DataOperations()
+    { 
+    }
+    public void EnumСodeBrainFuck(string BrainFuckCode)
     {
         for (int i = 0; i < BrainFuckCode.Length; i++)
         {
@@ -69,14 +72,14 @@ public class DataOperations
             }
         }
     }
-    public void NextCharValue() //тест есть
+    public virtual void NextCharValue() //тест есть
     {
         _dataFromRepository.Memory[_dataFromRepository.Current]++;
       // так не рабит нихуя
       //dataFromRepository.Memory[dataFromRepository.Current] = Convert.ToChar(Convert.ToInt32(dataFromRepository.Memory[dataFromRepository.Current]) + 1);
     }
 
-    public void PreviousCharValue() // тест есть
+    public virtual void PreviousCharValue() // тест есть
     {
 
         _dataFromRepository.Memory[_dataFromRepository.Current]--;
@@ -84,11 +87,11 @@ public class DataOperations
         // dataFromRepository.Memory[dataFromRepository.Current] = Convert.ToChar(Convert.ToInt32(dataFromRepository.Memory[dataFromRepository.Current]) - 1);
 
     }
-    public void DisplayCellValue() //тест есть 
+    public virtual void DisplayCellValue() //тест есть 
     {
         _inputOutput.OutputConsole(Convert.ToString(_dataFromRepository.Memory[_dataFromRepository.Current]));
     }
-    public void NextCell() //тест есть 
+    public virtual void NextCell() //тест есть 
     {
         if (_dataFromRepository.Current<_dataFromRepository.Memory.Length)
         {
@@ -96,7 +99,7 @@ public class DataOperations
         }
         
     }
-    public void PreviusCell() // тест есть 
+    public virtual void PreviusCell() // тест есть 
     {
         if (_dataFromRepository.Current>0)
         {
@@ -104,11 +107,11 @@ public class DataOperations
         }
         
     }
-    public void InputValueInCell()
+    public virtual void InputValueInCell()
     {
         _dataFromRepository.Memory[_dataFromRepository.Current] = _inputOutput.GetCharUser();
     }
-    public int IfZeroNext(int PositionNumber, string BrainFuckCode) //тест есть
+    public virtual int IfZeroNext(int PositionNumber, string BrainFuckCode) //тест есть
     {
         if (_dataFromRepository.Memory[_dataFromRepository.Current] == 0)
         {
@@ -128,7 +131,7 @@ public class DataOperations
         }
         return PositionNumber;
     }
-    public int IfNoZeroBack(int PositionNumber, string BrainFuckCode) //тест есть
+    public virtual int IfNoZeroBack(int PositionNumber, string BrainFuckCode) //тест есть
     {
         if (_dataFromRepository.Memory[_dataFromRepository.Current] != 0)
         {
