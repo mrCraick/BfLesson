@@ -193,98 +193,267 @@ namespace BrainFuckTestProject
             // arrange
             var repository = new Repository();
             var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader("H");
+            var testTextReader = new TestTextReader("}");
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
-            repository.Memory[0] = '}';
-            var expectedCurrent = "}";
+            var expectedCurrent = '}';
 
             // act
 
             dataOperations.InputValueInCell();
-            //var actual = testTextReader.InputHeh;
             var actual = repository.Memory[0];
             // assert
 
-            Assert.Equal(expectedCurrent[0], actual);
+            Assert.Equal(expectedCurrent, actual);
 
         }
 
-        public void enum—odeBrainFuckTest()
+        [Fact]
+
+        public void enum—odeBrainFuckTest1()
         {
             // arrange
-            
-        var repository = new Repository();
-        var testTextWriter = new TestTextWriter();
-        var testTextReader = new TestTextReader();
-        var inputOutput = new InputOutput(testTextReader, testTextWriter);
-        var dataOperations = new DataOperations(repository, inputOutput);
-        var testDataOperations = new TestDataOperations(Repository repository, InputOutput inputOutput);
-        var brainFuckCode = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
-        var expectedCurrent1 = 1;
-        var expectedCurrent2 = 1;
-        var expectedCurrent3 = 1;
-        var expectedCurrent4 = 1;
-        var expectedCurrent5 = 1;
-        var expectedCurrent6 = 1;
-        var expectedCurrent7 = 1;
-        var expectedCurrent8 = 1;
+            var repository = new Repository();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
+            var testDataOperations = new TestDataOperations(repository, inputOutput);
+            var brainFuckCode = "+";
+            string nameExpected = nameof(testDataOperations.NextCharValue);
+
 
             // act
-        dataOperations.enum—odeBrainFuck(brainFuckCode);
-        var actual = testTextWriter.OutputHeh;
+            testDataOperations.Enum—odeBrainFuck(brainFuckCode); 
+            var actual = testDataOperations.Result;
+            var actualName = testDataOperations.Name;
 
-        // assert
-        Assert.Equal(expectedCurrent, actual);
+
+            // assert
+            Assert.True(actual);
+            Assert.Equal(nameExpected, actualName);
         }
 
-
-
-
-    public class TestDataOperations : DataOperations
+        [Fact]
+        public void enum—odeBrainFuckTest2()
         {
-            private string _result = 1;
+            // arrange
+            var repository = new Repository();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
+            var testDataOperations = new TestDataOperations(repository, inputOutput);
+            var brainFuckCode = "-";
+            string nameExpected = nameof(testDataOperations.PreviousCharValue);
+
+
+            // act
+            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
+            var actual = testDataOperations.Result;
+            var actualName = testDataOperations.Name;
+
+
+            // assert
+            Assert.True(actual);
+            Assert.Equal(nameExpected, actualName);
+        }
+        [Fact]
+        public void enum—odeBrainFuckTest3()
+        {
+            // arrange
+            var repository = new Repository();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
+            var testDataOperations = new TestDataOperations(repository, inputOutput);
+            var brainFuckCode = ".";
+            string nameExpected = nameof(testDataOperations.DisplayCellValue);
+
+
+            // act
+            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
+            var actual = testDataOperations.Result;
+            var actualName = testDataOperations.Name;
+
+
+            // assert
+            Assert.True(actual);
+            Assert.Equal(nameExpected, actualName);
+        }
+
+        [Fact]
+        public void enum—odeBrainFuckTest4()
+        {
+            // arrange
+            var repository = new Repository();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
+            var testDataOperations = new TestDataOperations(repository, inputOutput);
+            var brainFuckCode = ">";
+            string nameExpected = nameof(testDataOperations.NextCell);
+
+
+            // act
+            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
+            var actual = testDataOperations.Result;
+            var actualName = testDataOperations.Name;
+
+
+            // assert
+            Assert.True(actual);
+            Assert.Equal(nameExpected, actualName);
+        }
+
+        [Fact]
+        public void enum—odeBrainFuckTest5()
+        {
+            // arrange
+            var repository = new Repository();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
+            var testDataOperations = new TestDataOperations(repository, inputOutput);
+            var brainFuckCode = "<";
+            string nameExpected = nameof(testDataOperations.PreviusCell);
+
+
+            // act
+            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
+            var actual = testDataOperations.Result;
+            var actualName = testDataOperations.Name;
+
+
+            // assert
+            Assert.True(actual);
+            Assert.Equal(nameExpected, actualName);
+        }
+
+        [Fact]
+        public void enum—odeBrainFuckTest6()
+        {
+            // arrange
+            var repository = new Repository();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
+            var testDataOperations = new TestDataOperations(repository, inputOutput);
+            var brainFuckCode = ",";
+            string nameExpected = nameof(testDataOperations.InputValueInCell);
+
+
+            // act
+            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
+            var actual = testDataOperations.Result;
+            var actualName = testDataOperations.Name;
+
+
+            // assert
+            Assert.True(actual);
+            Assert.Equal(nameExpected, actualName);
+        }
+
+        [Fact]
+        public void enum—odeBrainFuckTest7()
+         {
+            // arrange
+            var repository = new Repository();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
+            var testDataOperations = new TestDataOperations(repository, inputOutput);
+            var brainFuckCode = "[";
+            string nameExpected = nameof(testDataOperations.IfZeroNext);
+
+
+            // act
+            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
+            var actual = testDataOperations.Result;
+            var actualName = testDataOperations.Name;
+
+
+            // assert
+            Assert.True(actual);
+            Assert.Equal(nameExpected, actualName);
+        }
+
+        [Fact]
+        public void enum—odeBrainFuckTest8()
+        {
+            // arrange
+            var repository = new Repository();
+            var testTextWriter = new TestTextWriter();
+            var testTextReader = new TestTextReader();
+            var inputOutput = new InputOutput(testTextReader, testTextWriter);
+            var testDataOperations = new TestDataOperations(repository, inputOutput);
+            var brainFuckCode = "]";
+            string nameExpected = nameof(testDataOperations.IfNoZeroBack);
+
+
+            // act
+            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
+            var actual = testDataOperations.Result;
+            var actualName = testDataOperations.Name;
+
+
+            // assert
+            Assert.True(actual);
+            Assert.Equal(nameExpected, actualName);
+        }
+        // string a = nameof(Enum—odeBrainFuck); Á‡ÔËÒ˚‚‡ÂÚ Ì‡ËÏÂÌÓ‚‡ÌËÂ ÙÛÌÍˆËË ‚ ÔÂÂÏÂÌÌÛ˛,
+        // ˜ÚÓ ÔÓÁ‚ÓÎˇÂÚ ‚ ‰‡Î¸ÌÂÈ¯ÂÏ, ÔË ‡‚ÚÓ ËÁÏÂÌÂÌËË ÔÂÂËÏÂÌÌÓ‚˚‚‡Ú¸ Ë ÚÛÚ, ÌÂÊÂÎË ÔÓÒÚÓ "Enum—odeBrainFuck"
+        public class TestDataOperations : DataOperations
+        {
+            private bool _result;
+            private string _name;
             
-            public string Result => _result;
-
-
+            public bool Result => _result;
+            public string Name => _name;
             public TestDataOperations(Repository dataFromRepository,
         InputOutput inputOutput)
                 :base(dataFromRepository, inputOutput)
             {
-                
+                _result = false;
             }
             public override void NextCharValue()
             {
-                
+                _result = true;
+                _name = nameof(NextCharValue);
             }
             public override void PreviousCharValue()
             {
-
+                _result = true;
+                _name = nameof(PreviousCharValue);
             }
             public override void DisplayCellValue()
             {
-
+                _result = true;
+                _name = nameof(DisplayCellValue);
             }
             public override void NextCell()
             {
-
+                _result = true;
+                _name = nameof(NextCell);
             }
             public override void PreviusCell()
             {
-
+                _result = true;
+                _name = nameof(PreviusCell);
             }
             public override void InputValueInCell()
             {
-
+                _result = true;
+                _name = nameof(InputValueInCell);
             }
-            public override int IfZeroNext(int PositionNumber, string BrainFuckCode)
+            public override int IfZeroNext(int PositionNumber, string BrainFuckCode) 
             {
+                _result = true;
+                _name = nameof(IfZeroNext);
                 return 1;
             }
             public override int IfNoZeroBack(int PositionNumber, string BrainFuckCode)
             {
-
+                _result = true;
+                _name = nameof(IfNoZeroBack);
                 return 1;
             }
 

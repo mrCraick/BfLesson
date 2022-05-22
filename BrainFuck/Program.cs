@@ -46,10 +46,10 @@ public class DataOperations
             switch (BrainFuckCode[i])
             {
                 case '+':
-                    NextCharValue();
+                    NextCharValue();  //поменено местами
                     break;
                 case '-':
-                    PreviousCharValue();
+                    PreviousCharValue();  //поменено местами
                     break;
                 case '.':
                     DisplayCellValue();
