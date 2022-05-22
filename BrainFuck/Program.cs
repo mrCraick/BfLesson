@@ -36,9 +36,6 @@ public class DataOperations
         _dataFromRepository = dataFromRepository;
         _inputOutput = inputOutput;
     }
-    public DataOperations()
-    { 
-    }
     public void EnumСodeBrainFuck(string BrainFuckCode)
     {
         for (int i = 0; i < BrainFuckCode.Length; i++)

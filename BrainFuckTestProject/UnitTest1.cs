@@ -6,6 +6,13 @@ using Xunit;
 // arrange  подготовка данных для какого-то кода 
 // act исполнение кода
 // assert проверяем результат отработки кода
+
+//[Theory] позволяет несколько раз отработать тест
+//[InLineData("аргумент", "аргумент")] Позволяет всталять разные аргументы (аргументом может быть желаемый результат)
+////[InLineData("аргумент2", "аргумент2")] и так подставлять разные аргусменты до бесконечности
+
+
+
 namespace BrainFuckTestProject
 {
     public class DataOperationTest
@@ -18,10 +25,13 @@ namespace BrainFuckTestProject
             InputOutput inputOutput = new InputOutput(testTextReader, testTextWriter);
             DataOperations dataOperations = new DataOperations(repository, inputOutput);
         }
-        [Fact] //атрибут утверждение, что должно отработать без ошибок
+        //[Fact] атрибут утверждение, что должно отработать без ошибок
 
-
-        public void NextCellTest()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(69)]
+        [InlineData(121)]
+        public void NextCellTest(int newCurrent)
         {
             // arrange
             var repository = new Repository();
@@ -30,26 +40,26 @@ namespace BrainFuckTestProject
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
 
-            var expectedCurrent1 = repository.Current + 1;
-            var newCurrent = 69;
-            var expectedCurrent2 = 70;
+            var expectedCurrent1 = newCurrent + 1;
+            repository.Current = newCurrent;
 
             // act
             dataOperations.NextCell();
             var actual1 = repository.Current;
 
-            repository.Current = newCurrent;
-            dataOperations.NextCell();
-            var actual2 = repository.Current;
+
             // assert
 
             Assert.Equal(expectedCurrent1, actual1);
-            Assert.Equal(expectedCurrent2, actual2);
+
         }
 
-        [Fact]
+        [Theory]
+        [InlineData(5)]
+        [InlineData(4)]
+        [InlineData(13121)]
 
-        public void PreviusCellTest()
+        public void PreviusCellTest(int newCurrent)
         {
             // arrange
             var repository = new Repository();
@@ -58,26 +68,23 @@ namespace BrainFuckTestProject
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
 
-            var expectedCurrent1 = repository.Current;
-            var newCurrent = 11;
-            var expectedCurrent2 = 10;
+            var expectedCurrent1 = newCurrent - 1;
+            repository.Current = newCurrent;
 
             // act
             dataOperations.PreviusCell();
             var actual1 = repository.Current;
-
-            repository.Current = newCurrent;
-            dataOperations.PreviusCell();
-            var actual2 = repository.Current;
             // assert
 
             Assert.Equal(expectedCurrent1, actual1);
-            Assert.Equal(expectedCurrent2, actual2);
         }
 
-        [Fact]
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
 
-        public void NextCharValueTest()
+        public void NextCharValueTest(int newCurrent)
         {
             // arrange
             var repository = new Repository();
@@ -86,7 +93,8 @@ namespace BrainFuckTestProject
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
 
-            var expectedCurrent1 = (char)1;
+            var expectedCurrent1 = (char)newCurrent+1;
+            repository.Memory[repository.Current] = (char)newCurrent;
 
             // act
             dataOperations.NextCharValue();
@@ -97,9 +105,12 @@ namespace BrainFuckTestProject
          
         }
 
-        [Fact]
+        [Theory]
+        [InlineData(33)]
+        [InlineData(23)]
+        [InlineData(44)]
 
-        public void PreviousCharValueTest()
+        public void PreviousCharValueTest(int newCurrent)
         {
             // arrange
             var repository = new Repository();
@@ -108,11 +119,11 @@ namespace BrainFuckTestProject
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
 
-            repository.Memory[repository.Current] = (char)(repository.Memory[repository.Current] + 1); 
-            var expectedCurrent1 = (char)0;
+            var expectedCurrent1 = (char)newCurrent - 1;
+            repository.Memory[repository.Current] = (char)newCurrent;
 
             // act
-           
+
             dataOperations.PreviousCharValue();
             var actual1 = repository.Memory[repository.Current];
 
