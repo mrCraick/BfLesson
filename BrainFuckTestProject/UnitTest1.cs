@@ -126,9 +126,9 @@ namespace BrainFuckTestProject
 
 
         [Theory]
-        [InlineData("[++++[++++++++]+++++++]", 22)]
-        [InlineData("[++++[++++++++]+++++]", 20)]
-        [InlineData("[++++[++++++++]++++++++++++]", 27)]
+        [InlineData("[]", 1)]
+        [InlineData("[++++[++++++[][][][][][][][][][][]][+++++++][][][][]][][][][][][][][]++]+++++]", 52)]
+        [InlineData("[++++[++++++++]++++++++[++++[[[+++++++++++[+++++++]]]--------------]]++++]", 73)]
         public void IfZeroNextTest(string newCurrentProgram, int expectedCurrent)
         {
             // arrange
