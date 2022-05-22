@@ -149,8 +149,11 @@ namespace BrainFuckTestProject
 
         }
 
-        [Fact]
-        public void IfNoZeroBackTest()
+        [Theory]
+        [InlineData("[++++[++++++++]+++++++]",22)]
+        [InlineData("[[[]]]",5)]
+        [InlineData("[++++[++++++++]++++++++[++++[[[+++++++++++[+++++++]]]--------------]]++++]",73)]
+        public void IfNoZeroBackTest(string newCurrentProgram, int newPositionNumber)
         {
             // arrange
             var repository = new Repository();
@@ -159,13 +162,13 @@ namespace BrainFuckTestProject
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
             repository.Memory[repository.Current] = (char)1;
-            repository.Program = "[++++[++++++++]+++++++]";
+            repository.Program = newCurrentProgram;
             var expectedCurrent1 = 0;
-            var PositionNumber = 22;
+            var positionNumber = newPositionNumber;
 
             // act
             
-            var actual1 = dataOperations.IfNoZeroBack(PositionNumber, repository.Program);
+            var actual1 = dataOperations.IfNoZeroBack(newPositionNumber, repository.Program);
 
             // assert
             Assert.Equal(expectedCurrent1, actual1);
