@@ -17,14 +17,7 @@ namespace BrainFuckTestProject
 {
     public class DataOperationTest
     {
-        public DataOperationTest()
-        {
-            Repository repository = new Repository();
-            TestTextWriter testTextWriter = new TestTextWriter();
-            TestTextReader testTextReader = new TestTextReader();
-            InputOutput inputOutput = new InputOutput(testTextReader, testTextWriter);
-            DataOperations dataOperations = new DataOperations(repository, inputOutput);
-        }
+
         //[Fact] атрибут утверждение, что должно отработать без ошибок
 
         [Theory]
@@ -130,10 +123,13 @@ namespace BrainFuckTestProject
             // assert
             Assert.Equal(expectedCurrent1, actual1); 
         }
-        
-        
-        [Fact]
-        public void IfZeroNextTest()
+
+
+        [Theory]
+        [InlineData("[++++[++++++++]+++++++]", 22)]
+        [InlineData("[++++[++++++++]+++++]", 20)]
+        [InlineData("[++++[++++++++]++++++++++++]", 27)]
+        public void IfZeroNextTest(string newCurrentProgram, int expectedCurrent)
         {
             // arrange
             var repository = new Repository();
@@ -142,8 +138,8 @@ namespace BrainFuckTestProject
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
             var dataOperations = new DataOperations(repository, inputOutput);
             repository.Memory[repository.Current] = (char)0;
-            repository.Program = "[++++[++++++++]+++++++]";
-            var expectedCurrent1 = 22;
+            repository.Program = newCurrentProgram;
+            var expectedCurrent1 = expectedCurrent;
             var PositionNumber = 0;
             // act
             
