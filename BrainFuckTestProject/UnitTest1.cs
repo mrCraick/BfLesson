@@ -243,7 +243,7 @@ namespace BrainFuckTestProject
         public void Enum—odeBrainFuckTest(string brainFuckCode)
         {
             // arrange
-            var mockBrainFuckFunction = new Mock<BrainFuckFunction>();
+            var mockBrainFuckFunction = new Mock<IBrainFuckFunction>();
             var called = false;
             mockBrainFuckFunction.Setup(x => x.NextCharValue()).Callback(()=> called = true);
             mockBrainFuckFunction.Setup(x => x.PreviousCharValue()).Callback(() => called = true);
@@ -251,21 +251,20 @@ namespace BrainFuckTestProject
             mockBrainFuckFunction.Setup(x => x.NextCell()).Callback(() => called = true);
             mockBrainFuckFunction.Setup(x => x.PreviusCell()).Callback(() => called = true);
             mockBrainFuckFunction.Setup(x => x.InputValueInCell()).Callback(() => called = true);
-            mockBrainFuckFunction.Setup(x => x.IfZeroNext(1, brainFuckCode)).Callback(() => called = true);
-            mockBrainFuckFunction.Setup(x => x.IfNoZeroBack(1, brainFuckCode)).Callback(() => called = true);
+            mockBrainFuckFunction.Setup(x => x.IfZeroNext(0, brainFuckCode)).Callback(() => called = true);
+            mockBrainFuckFunction.Setup(x => x.IfNoZeroBack(0, brainFuckCode)).Callback(() => called = true);
 
-            var brainFuckFunction = new TestBrainFuckFunction();
-            var dataOperations = new DataOperations(brainFuckFunction);
+            var dataOperations = new DataOperations(mockBrainFuckFunction.Object);
             
 
 
             // act
             dataOperations.Enum—odeBrainFuck(brainFuckCode);
-            var actual = brainFuckFunction.Result;
+
 
 
             // assert
-            Assert.True(actual);
+            Assert.True(called);
         }
 
 
