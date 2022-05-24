@@ -3,7 +3,8 @@
     public static void Main()
     {
         Repository BrainFuckCode = new Repository();
-        DataOperations dataOperations = new DataOperations(BrainFuckCode, new InputOutput(Console.In, Console.Out)) ;
+        var brainFuckFunction = new BrainFuckFunction(BrainFuckCode, new InputOutput(Console.In, Console.Out));
+        DataOperations dataOperations = new DataOperations(brainFuckFunction);
         dataOperations.EnumСodeBrainFuck(BrainFuckCode.Program);
 
     }
@@ -16,66 +17,42 @@ public class Repository
     public string Program { get; set; }
     public Repository()
     {
-      Memory = new char[30000];
-      Current = 0;
-      Program = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
+        Memory = new char[30000];
+        Current = 0;
+        Program = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
     }
 
 }
-public class DataOperations
+
+public interface IBrainFuckFunction
+{
+    void NextCharValue();
+    void PreviousCharValue();
+    void DisplayCellValue();
+    void NextCell();
+    void PreviusCell();
+    void InputValueInCell();
+    int IfZeroNext(int positionNumber, string brainFuckCode);
+    int IfNoZeroBack(int positionNumber, string brainFuckCode);
+}
+
+public class BrainFuckFunction : IBrainFuckFunction
 {
     private Repository _dataFromRepository;
     private InputOutput _inputOutput;
 
-
-
-    public DataOperations(
-        Repository dataFromRepository,
-        InputOutput inputOutput)
+    public BrainFuckFunction(Repository dataFromRepository, InputOutput inputOutput)
     {
         _dataFromRepository = dataFromRepository;
         _inputOutput = inputOutput;
     }
-    public void EnumСodeBrainFuck(string BrainFuckCode)
-    {
-        for (int i = 0; i < BrainFuckCode.Length; i++)
-        {
-            switch (BrainFuckCode[i])
-            {
-                case '+':
-                    NextCharValue();  //поменено местами
-                    break;
-                case '-':
-                    PreviousCharValue();  //поменено местами
-                    break;
-                case '.':
-                    DisplayCellValue();
-                    break;
-                case '>':
-                    NextCell();
-                    break;
-                case '<':
-                    PreviusCell();
-                    break;
-                case ',':
-                    InputValueInCell();
-                    break;
-                case '[':
-                    i = IfZeroNext(i, BrainFuckCode);
-                    break;
-                case ']':
-                    i = IfNoZeroBack(i, BrainFuckCode);
-                    break;
-            }
-        }
-    }
+
     public virtual void NextCharValue() //тест есть
     {
         _dataFromRepository.Memory[_dataFromRepository.Current]++;
-      // так не рабит нихуя
-      //dataFromRepository.Memory[dataFromRepository.Current] = Convert.ToChar(Convert.ToInt32(dataFromRepository.Memory[dataFromRepository.Current]) + 1);
+        // так не рабит нихуя
+        //dataFromRepository.Memory[dataFromRepository.Current] = Convert.ToChar(Convert.ToInt32(dataFromRepository.Memory[dataFromRepository.Current]) + 1);
     }
-
     public virtual void PreviousCharValue() // тест есть
     {
 
@@ -90,67 +67,111 @@ public class DataOperations
     }
     public virtual void NextCell() //тест есть 
     {
-        if (_dataFromRepository.Current<_dataFromRepository.Memory.Length)
+        if (_dataFromRepository.Current < _dataFromRepository.Memory.Length)
         {
             _dataFromRepository.Current = _dataFromRepository.Current + 1;
         }
-        
+
     }
     public virtual void PreviusCell() // тест есть 
     {
-        if (_dataFromRepository.Current>0)
+        if (_dataFromRepository.Current > 0)
         {
             _dataFromRepository.Current = _dataFromRepository.Current - 1;
         }
-        
+
     }
     public virtual void InputValueInCell()
     {
         _dataFromRepository.Memory[_dataFromRepository.Current] = _inputOutput.GetCharUser();
     }
-    public virtual int IfZeroNext(int PositionNumber, string BrainFuckCode) //тест есть
+    public virtual int IfZeroNext(int positionNumber, string brainFuckCode) //тест есть
     {
         if (_dataFromRepository.Memory[_dataFromRepository.Current] == 0)
         {
             int NumberOfopenBrackets = 1;
             while (NumberOfopenBrackets != 0)
             {
-                PositionNumber++;
-                if (BrainFuckCode[PositionNumber] == '[')
+                positionNumber++;
+                if (brainFuckCode[positionNumber] == '[')
                 {
                     NumberOfopenBrackets++;
                 }
-                if (BrainFuckCode[PositionNumber] == ']')
+                if (brainFuckCode[positionNumber] == ']')
                 {
                     NumberOfopenBrackets--;
                 }
             }
         }
-        return PositionNumber;
+        return positionNumber;
     }
-    public virtual int IfNoZeroBack(int PositionNumber, string BrainFuckCode) //тест есть
+    public virtual int IfNoZeroBack(int positionNumber, string brainFuckCode) //тест есть
     {
         if (_dataFromRepository.Memory[_dataFromRepository.Current] != 0)
         {
             int NumberOfopenBrackets = 1;
             while (NumberOfopenBrackets != 0)
             {
-                PositionNumber--;
-                if (BrainFuckCode[PositionNumber] == ']')
+                positionNumber--;
+                if (brainFuckCode[positionNumber] == ']')
                 {
                     NumberOfopenBrackets++;
                 }
-                if (BrainFuckCode[PositionNumber] == '[')
+                if (brainFuckCode[positionNumber] == '[')
                 {
                     NumberOfopenBrackets--;
                 }
 
             }
         }
-        return PositionNumber;
+        return positionNumber;
+    }
+}
+
+public class DataOperations
+{
+    private IBrainFuckFunction _brainFuckFunction;
+
+    public DataOperations(IBrainFuckFunction brainFuckFunction)
+    {
+        _brainFuckFunction = brainFuckFunction;
     }
 
-    
+    public void EnumСodeBrainFuck(string brainFuckCode)
+    {
+        for (int i = 0; i < brainFuckCode.Length; i++)
+        {
+            switch (brainFuckCode[i])
+            {
+                case '+':
+                    _brainFuckFunction.NextCharValue();
+                    break;
+                case '-':
+                    _brainFuckFunction.PreviousCharValue();  //поменено местами
+                    break;
+                case '.':
+                    _brainFuckFunction.DisplayCellValue();
+                    break;
+                case '>':
+                    _brainFuckFunction.NextCell();
+                    break;
+                case '<':
+                    _brainFuckFunction.PreviusCell();
+                    break;
+                case ',':
+                    _brainFuckFunction.InputValueInCell();
+                    break;
+                case '[':
+                    i = _brainFuckFunction.IfZeroNext(i, brainFuckCode);
+                    break;
+                case ']':
+                    i = _brainFuckFunction.IfNoZeroBack(i, brainFuckCode);
+                    break;
+            }
+        }
+    }
+
+
 }
 
 public class InputOutput
@@ -158,14 +179,14 @@ public class InputOutput
     private TextReader Reader;
     private TextWriter Writer;
 
-    public  InputOutput (TextReader output, TextWriter input)
-    { 
-       Reader = output;
-       Writer = input;
-        
+    public InputOutput(TextReader output, TextWriter input)
+    {
+        Reader = output;
+        Writer = input;
+
     }
 
-public char GetCharUser()
+    public char GetCharUser()
     {
         while (true)
         {

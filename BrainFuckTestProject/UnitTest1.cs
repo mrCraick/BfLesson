@@ -1,6 +1,8 @@
 using System.IO;
 using System.Text;
 using Xunit;
+using Moq;
+
 // AAA RULE
 
 // arrange  ÔÓ‰„ÓÚÓ‚Í‡ ‰‡ÌÌ˚ı ‰Îˇ Í‡ÍÓ„Ó-ÚÓ ÍÓ‰‡ 
@@ -31,13 +33,13 @@ namespace BrainFuckTestProject
             var testTextWriter = new TestTextWriter();
             var testTextReader = new TestTextReader();
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var dataOperations = new DataOperations(repository, inputOutput);
+            var brainFuckFunction = new BrainFuckFunction(repository, inputOutput);
 
             var expectedCurrent1 = newCurrent + 1;
             repository.Current = newCurrent;
 
             // act
-            dataOperations.NextCell();
+            brainFuckFunction.NextCell();
             var actual1 = repository.Current;
 
 
@@ -59,13 +61,13 @@ namespace BrainFuckTestProject
             var testTextWriter = new TestTextWriter();
             var testTextReader = new TestTextReader();
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var dataOperations = new DataOperations(repository, inputOutput);
+            var brainFuckFunction = new BrainFuckFunction(repository, inputOutput);
 
             var expectedCurrent1 = newCurrent - 1;
             repository.Current = newCurrent;
 
             // act
-            dataOperations.PreviusCell();
+            brainFuckFunction.PreviusCell();
             var actual1 = repository.Current;
             // assert
 
@@ -84,18 +86,18 @@ namespace BrainFuckTestProject
             var testTextWriter = new TestTextWriter();
             var testTextReader = new TestTextReader();
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var dataOperations = new DataOperations(repository, inputOutput);
+            var brainFuckFunction = new BrainFuckFunction(repository, inputOutput);
 
-            var expectedCurrent1 = (char)newCurrent+1;
+            var expectedCurrent1 = (char)newCurrent + 1;
             repository.Memory[repository.Current] = (char)newCurrent;
 
             // act
-            dataOperations.NextCharValue();
+            brainFuckFunction.NextCharValue();
             var actual1 = repository.Memory[repository.Current];
 
             // assert
             Assert.Equal(expectedCurrent1, actual1); // 1; 2
-         
+
         }
 
         [Theory]
@@ -110,18 +112,18 @@ namespace BrainFuckTestProject
             var testTextWriter = new TestTextWriter();
             var testTextReader = new TestTextReader();
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var dataOperations = new DataOperations(repository, inputOutput);
+            var brainFuckFunction = new BrainFuckFunction(repository, inputOutput);
 
             var expectedCurrent1 = (char)newCurrent - 1;
             repository.Memory[repository.Current] = (char)newCurrent;
 
             // act
 
-            dataOperations.PreviousCharValue();
+            brainFuckFunction.PreviousCharValue();
             var actual1 = repository.Memory[repository.Current];
 
             // assert
-            Assert.Equal(expectedCurrent1, actual1); 
+            Assert.Equal(expectedCurrent1, actual1);
         }
 
 
@@ -136,23 +138,23 @@ namespace BrainFuckTestProject
             var testTextWriter = new TestTextWriter();
             var testTextReader = new TestTextReader();
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var dataOperations = new DataOperations(repository, inputOutput);
+            var brainFuckFunction = new BrainFuckFunction(repository, inputOutput);
             repository.Memory[repository.Current] = (char)0;
             repository.Program = newCurrentProgram;
             var expectedCurrent1 = expectedCurrent;
             var PositionNumber = 0;
             // act
-            
-            var actual1 = dataOperations.IfZeroNext(PositionNumber, repository.Program);
+
+            var actual1 = brainFuckFunction.IfZeroNext(PositionNumber, repository.Program);
             // assert
             Assert.Equal(expectedCurrent1, actual1);
 
         }
 
         [Theory]
-        [InlineData("[++++[++++++++]+++++++]",22)]
-        [InlineData("[[[]]]",5)]
-        [InlineData("[++++[++++++++]++++++++[++++[[[+++++++++++[+++++++]]]--------------]]++++]",73)]
+        [InlineData("[++++[++++++++]+++++++]", 22)]
+        [InlineData("[[[]]]", 5)]
+        [InlineData("[++++[++++++++]++++++++[++++[[[+++++++++++[+++++++]]]--------------]]++++]", 73)]
         public void IfNoZeroBackTest(string newCurrentProgram, int newPositionNumber)
         {
             // arrange
@@ -160,82 +162,92 @@ namespace BrainFuckTestProject
             var testTextWriter = new TestTextWriter();
             var testTextReader = new TestTextReader();
             var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var dataOperations = new DataOperations(repository, inputOutput);
+            var brainFuckFunction = new BrainFuckFunction(repository, inputOutput);
             repository.Memory[repository.Current] = (char)1;
             repository.Program = newCurrentProgram;
             var expectedCurrent1 = 0;
             var positionNumber = newPositionNumber;
 
             // act
-            
-            var actual1 = dataOperations.IfNoZeroBack(newPositionNumber, repository.Program);
+
+            var actual1 = brainFuckFunction.IfNoZeroBack(newPositionNumber, repository.Program);
 
             // assert
             Assert.Equal(expectedCurrent1, actual1);
         }
 
         [Fact]
-
+      
         public void DisplayCellValueTest()
         {
             // arrange
+            var mockTextWriter = new Mock<TextWriter>();
+            var called = false;
+            mockTextWriter.Setup(x => x.Write("{")).Callback(() => called = true);
+
             var repository = new Repository();
-            var testTextWriter = new TestTextWriter();
             var testTextReader = new TestTextReader();
-            var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var dataOperations = new DataOperations(repository,inputOutput);
+
+            var inputOutput = new InputOutput(testTextReader, mockTextWriter.Object);
+            var brainFuckFunction = new BrainFuckFunction(repository, inputOutput);
 
             repository.Memory[0] = '{';
-            var expectedCurrent = "{";
+
             // act
-            dataOperations.DisplayCellValue();
-            var actual = testTextWriter.OutputHeh;
+            brainFuckFunction.DisplayCellValue();
+
 
             // assert
-            Assert.Equal(expectedCurrent, actual);
+            Assert.True(called);
 
         }
 
         [Fact]
 
-        public void InputValueInCellTest() 
+        public void InputValueInCellTest()
         {
             // arrange
+
+            var mockTextReader = new Mock<TextReader>();
+            mockTextReader.Setup(x => x.ReadLine()).Returns("}");
+
             var repository = new Repository();
             var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader("}");
-            var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var dataOperations = new DataOperations(repository, inputOutput);
+            var inputOutput = new InputOutput(mockTextReader.Object, testTextWriter);
+            var brainFuckFunction = new BrainFuckFunction(repository, inputOutput);
             var expectedCurrent = '}';
 
             // act
 
-            dataOperations.InputValueInCell();
+            brainFuckFunction.InputValueInCell();
             var actual = repository.Memory[0];
             // assert
 
             Assert.Equal(expectedCurrent, actual);
 
         }
-
-        [Fact]
-
-        public void enum—odeBrainFuckTest1()
+        
+        [Theory]
+        [InlineData("+", "NextCharValue")]
+        [InlineData("-", "PreviousCharValue")]
+        [InlineData(".", "DisplayCellValue")]
+        [InlineData(">", "NextCell")]
+        [InlineData("<", "PreviusCell")]
+        [InlineData(",", "InputValueInCell")]
+        [InlineData("[", "IfZeroNext")]
+        [InlineData("]", "IfNoZeroBack")]
+        public void enum—odeBrainFuckTest(string brainFuckCode, string nameExpected)
         {
             // arrange
-            var repository = new Repository();
-            var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader();
-            var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var testDataOperations = new TestDataOperations(repository, inputOutput);
-            var brainFuckCode = "+";
-            string nameExpected = nameof(testDataOperations.NextCharValue);
+            var brainFuckFunction = new TestBrainFuckFunction();
+            var dataOperations = new DataOperations(brainFuckFunction);
+            
 
 
             // act
-            testDataOperations.Enum—odeBrainFuck(brainFuckCode); 
-            var actual = testDataOperations.Result;
-            var actualName = testDataOperations.Name;
+            dataOperations.Enum—odeBrainFuck(brainFuckCode);
+            var actual = brainFuckFunction.Result;
+            var actualName = brainFuckFunction.Name;
 
 
             // assert
@@ -243,227 +255,61 @@ namespace BrainFuckTestProject
             Assert.Equal(nameExpected, actualName);
         }
 
-        [Fact]
-        public void enum—odeBrainFuckTest2()
-        {
-            // arrange
-            var repository = new Repository();
-            var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader();
-            var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var testDataOperations = new TestDataOperations(repository, inputOutput);
-            var brainFuckCode = "-";
-            string nameExpected = nameof(testDataOperations.PreviousCharValue);
 
-
-            // act
-            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
-            var actual = testDataOperations.Result;
-            var actualName = testDataOperations.Name;
-
-
-            // assert
-            Assert.True(actual);
-            Assert.Equal(nameExpected, actualName);
-        }
-        [Fact]
-        public void enum—odeBrainFuckTest3()
-        {
-            // arrange
-            var repository = new Repository();
-            var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader();
-            var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var testDataOperations = new TestDataOperations(repository, inputOutput);
-            var brainFuckCode = ".";
-            string nameExpected = nameof(testDataOperations.DisplayCellValue);
-
-
-            // act
-            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
-            var actual = testDataOperations.Result;
-            var actualName = testDataOperations.Name;
-
-
-            // assert
-            Assert.True(actual);
-            Assert.Equal(nameExpected, actualName);
-        }
-
-        [Fact]
-        public void enum—odeBrainFuckTest4()
-        {
-            // arrange
-            var repository = new Repository();
-            var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader();
-            var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var testDataOperations = new TestDataOperations(repository, inputOutput);
-            var brainFuckCode = ">";
-            string nameExpected = nameof(testDataOperations.NextCell);
-
-
-            // act
-            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
-            var actual = testDataOperations.Result;
-            var actualName = testDataOperations.Name;
-
-
-            // assert
-            Assert.True(actual);
-            Assert.Equal(nameExpected, actualName);
-        }
-
-        [Fact]
-        public void enum—odeBrainFuckTest5()
-        {
-            // arrange
-            var repository = new Repository();
-            var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader();
-            var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var testDataOperations = new TestDataOperations(repository, inputOutput);
-            var brainFuckCode = "<";
-            string nameExpected = nameof(testDataOperations.PreviusCell);
-
-
-            // act
-            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
-            var actual = testDataOperations.Result;
-            var actualName = testDataOperations.Name;
-
-
-            // assert
-            Assert.True(actual);
-            Assert.Equal(nameExpected, actualName);
-        }
-
-        [Fact]
-        public void enum—odeBrainFuckTest6()
-        {
-            // arrange
-            var repository = new Repository();
-            var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader();
-            var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var testDataOperations = new TestDataOperations(repository, inputOutput);
-            var brainFuckCode = ",";
-            string nameExpected = nameof(testDataOperations.InputValueInCell);
-
-
-            // act
-            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
-            var actual = testDataOperations.Result;
-            var actualName = testDataOperations.Name;
-
-
-            // assert
-            Assert.True(actual);
-            Assert.Equal(nameExpected, actualName);
-        }
-
-        [Fact]
-        public void enum—odeBrainFuckTest7()
-         {
-            // arrange
-            var repository = new Repository();
-            var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader();
-            var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var testDataOperations = new TestDataOperations(repository, inputOutput);
-            var brainFuckCode = "[";
-            string nameExpected = nameof(testDataOperations.IfZeroNext);
-
-
-            // act
-            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
-            var actual = testDataOperations.Result;
-            var actualName = testDataOperations.Name;
-
-
-            // assert
-            Assert.True(actual);
-            Assert.Equal(nameExpected, actualName);
-        }
-
-        [Fact]
-        public void enum—odeBrainFuckTest8()
-        {
-            // arrange
-            var repository = new Repository();
-            var testTextWriter = new TestTextWriter();
-            var testTextReader = new TestTextReader();
-            var inputOutput = new InputOutput(testTextReader, testTextWriter);
-            var testDataOperations = new TestDataOperations(repository, inputOutput);
-            var brainFuckCode = "]";
-            string nameExpected = nameof(testDataOperations.IfNoZeroBack);
-
-
-            // act
-            testDataOperations.Enum—odeBrainFuck(brainFuckCode);
-            var actual = testDataOperations.Result;
-            var actualName = testDataOperations.Name;
-
-
-            // assert
-            Assert.True(actual);
-            Assert.Equal(nameExpected, actualName);
-        }
         // string a = nameof(Enum—odeBrainFuck); Á‡ÔËÒ˚‚‡ÂÚ Ì‡ËÏÂÌÓ‚‡ÌËÂ ÙÛÌÍˆËË ‚ ÔÂÂÏÂÌÌÛ˛,
         // ˜ÚÓ ÔÓÁ‚ÓÎˇÂÚ ‚ ‰‡Î¸ÌÂÈ¯ÂÏ, ÔË ‡‚ÚÓ ËÁÏÂÌÂÌËË ÔÂÂËÏÂÌÌÓ‚˚‚‡Ú¸ Ë ÚÛÚ, ÌÂÊÂÎË ÔÓÒÚÓ "Enum—odeBrainFuck"
-        public class TestDataOperations : DataOperations
+        public class TestBrainFuckFunction : IBrainFuckFunction
         {
             private bool _result;
             private string _name;
-            
+
             public bool Result => _result;
             public string Name => _name;
-            public TestDataOperations(Repository dataFromRepository,
-        InputOutput inputOutput)
-                :base(dataFromRepository, inputOutput)
+            public TestBrainFuckFunction()
             {
                 _result = false;
+                _name = string.Empty;
             }
-            public override void NextCharValue()
+            public void NextCharValue()
             {
                 _result = true;
-                _name = nameof(NextCharValue);
+                _name = "NextCharValue";
             }
-            public override void PreviousCharValue()
+            public void PreviousCharValue()
             {
                 _result = true;
-                _name = nameof(PreviousCharValue);
+                _name = "PreviousCharValue";
             }
-            public override void DisplayCellValue()
+            public void DisplayCellValue()
             {
                 _result = true;
-                _name = nameof(DisplayCellValue);
+                _name = "DisplayCellValue";
             }
-            public override void NextCell()
+            public void NextCell()
             {
                 _result = true;
-                _name = nameof(NextCell);
+                _name = "NextCell";
             }
-            public override void PreviusCell()
+            public void PreviusCell()
             {
                 _result = true;
-                _name = nameof(PreviusCell);
+                _name = "PreviusCell";
             }
-            public override void InputValueInCell()
+            public void InputValueInCell()
             {
                 _result = true;
-                _name = nameof(InputValueInCell);
+                _name = "InputValueInCell";
             }
-            public override int IfZeroNext(int PositionNumber, string BrainFuckCode) 
+            public int IfZeroNext(int PositionNumber, string BrainFuckCode) 
             {
                 _result = true;
-                _name = nameof(IfZeroNext);
+                _name = "IfZeroNext";
                 return 1;
             }
-            public override int IfNoZeroBack(int PositionNumber, string BrainFuckCode)
+            public int IfNoZeroBack(int PositionNumber, string BrainFuckCode)
             {
                 _result = true;
-                _name = nameof(IfNoZeroBack);
+                _name = "IfNoZeroBack";
                 return 1;
             }
 
