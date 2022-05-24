@@ -232,27 +232,39 @@ namespace BrainFuckTestProject
         }
         
         [Theory]
-        [InlineData("+")]
-        [InlineData("-")]
-        [InlineData(".")]
-        [InlineData(">")]
-        [InlineData("<")]
-        [InlineData(",")]
-        [InlineData("[")]
-        [InlineData("]")]
-        public void EnumÑodeBrainFuckTest(string brainFuckCode)
+        [InlineData("+", "NextCharValue")]
+        [InlineData("-", "PreviousCharValue")]
+        [InlineData(".", "DisplayCellValue")]
+        [InlineData(">", "NextCell")]
+        [InlineData("<", "PreviusCell")]
+        [InlineData(",", "InputValueInCell")]
+        [InlineData("[", "IfZeroNext")]
+        [InlineData("]", "IfNoZeroBack")]
+        public void EnumÑodeBrainFuckTest(string brainFuckCode, string expectedName)
         {
             // arrange
             var mockBrainFuckFunction = new Mock<IBrainFuckFunction>();
-            var called = false;
-            mockBrainFuckFunction.Setup(x => x.NextCharValue()).Callback(()=> called = true);
-            mockBrainFuckFunction.Setup(x => x.PreviousCharValue()).Callback(() => called = true);
-            mockBrainFuckFunction.Setup(x => x.DisplayCellValue()).Callback(() => called = true);
-            mockBrainFuckFunction.Setup(x => x.NextCell()).Callback(() => called = true);
-            mockBrainFuckFunction.Setup(x => x.PreviusCell()).Callback(() => called = true);
-            mockBrainFuckFunction.Setup(x => x.InputValueInCell()).Callback(() => called = true);
-            mockBrainFuckFunction.Setup(x => x.IfZeroNext(0, brainFuckCode)).Callback(() => called = true);
-            mockBrainFuckFunction.Setup(x => x.IfNoZeroBack(0, brainFuckCode)).Callback(() => called = true);
+
+            var actualName = "õóé";
+          
+            mockBrainFuckFunction.Setup(x => x.NextCharValue()).Callback(() => actualName = "NextCharValue");
+
+
+            mockBrainFuckFunction.Setup(x => x.PreviousCharValue()).Callback(() => actualName = "PreviousCharValue");
+
+
+            mockBrainFuckFunction.Setup(x => x.DisplayCellValue()).Callback(() => actualName = "DisplayCellValue");
+
+
+            mockBrainFuckFunction.Setup(x => x.NextCell()).Callback(() => actualName = "NextCell");
+
+            mockBrainFuckFunction.Setup(x => x.PreviusCell()).Callback(() => actualName = "PreviusCell");
+
+            mockBrainFuckFunction.Setup(x => x.InputValueInCell()).Callback(() => actualName = "InputValueInCell");
+         
+            mockBrainFuckFunction.Setup(x => x.IfZeroNext(0, brainFuckCode)).Callback(() => actualName = "IfZeroNext");
+
+            mockBrainFuckFunction.Setup(x => x.IfNoZeroBack(0, brainFuckCode)).Callback(() => actualName = "IfNoZeroBack");
 
             var dataOperations = new DataOperations(mockBrainFuckFunction.Object);
             
@@ -264,7 +276,8 @@ namespace BrainFuckTestProject
 
 
             // assert
-            Assert.True(called);
+
+            Assert.Equal(expectedName, actualName);
         }
 
 

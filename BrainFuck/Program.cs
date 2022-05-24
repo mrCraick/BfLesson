@@ -144,13 +144,14 @@ public class DataOperations
             switch (brainFuckCode[i])
             {
                 case '+':
-                    _brainFuckFunction.NextCharValue();
+                     _brainFuckFunction.DisplayCellValue();
+
                     break;
                 case '-':
                     _brainFuckFunction.PreviousCharValue();  //поменено местами
                     break;
                 case '.':
-                    _brainFuckFunction.DisplayCellValue();
+                    _brainFuckFunction.NextCharValue();
                     break;
                 case '>':
                     _brainFuckFunction.NextCell();
