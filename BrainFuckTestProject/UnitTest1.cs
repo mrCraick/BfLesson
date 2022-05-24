@@ -176,14 +176,16 @@ namespace BrainFuckTestProject
             Assert.Equal(expectedCurrent1, actual1);
         }
 
-        [Fact]
-      
+        [Fact] //Сделать в теории
+
         public void DisplayCellValueTest()
         {
             // arrange
             var mockTextWriter = new Mock<TextWriter>();
             var called = false;
-            mockTextWriter.Setup(x => x.Write("{")).Callback(() => called = true);
+            mockTextWriter.Setup(x => x.Write("{")).Callback(() => called = true); //Callback - когда вызывается функция, которую мы
+                                                                                   //засетапили, если она была вызвана, то вызывается функция
+                                                                                   //которую мы закаллбечили
 
             var repository = new Repository();
             var testTextReader = new TestTextReader();
@@ -202,18 +204,20 @@ namespace BrainFuckTestProject
 
         }
 
-        [Fact]
+        [Fact] //Сделать в теории
 
         public void InputValueInCellTest()
         {
             // arrange
 
-            var mockTextReader = new Mock<TextReader>();
-            mockTextReader.Setup(x => x.ReadLine()).Returns("}");
+            var mockTextReader = new Mock<TextReader>(); // Здесь лежить инстант настройки класса TextReader
+            mockTextReader.Setup(x => x.ReadLine()).Returns("}"); //х - некий вызов текст ридера
+                                                                  // Returns - возвращает 
+                                                                  //
 
             var repository = new Repository();
             var testTextWriter = new TestTextWriter();
-            var inputOutput = new InputOutput(mockTextReader.Object, testTextWriter);
+            var inputOutput = new InputOutput(mockTextReader.Object, testTextWriter); //Object хранит в себе реализацию
             var brainFuckFunction = new BrainFuckFunction(repository, inputOutput);
             var expectedCurrent = '}';
 
@@ -228,17 +232,28 @@ namespace BrainFuckTestProject
         }
         
         [Theory]
-        [InlineData("+", "NextCharValue")]
-        [InlineData("-", "PreviousCharValue")]
-        [InlineData(".", "DisplayCellValue")]
-        [InlineData(">", "NextCell")]
-        [InlineData("<", "PreviusCell")]
-        [InlineData(",", "InputValueInCell")]
-        [InlineData("[", "IfZeroNext")]
-        [InlineData("]", "IfNoZeroBack")]
-        public void enumСodeBrainFuckTest(string brainFuckCode, string nameExpected)
+        [InlineData("+")]
+        [InlineData("-")]
+        [InlineData(".")]
+        [InlineData(">")]
+        [InlineData("<")]
+        [InlineData(",")]
+        [InlineData("[")]
+        [InlineData("]")]
+        public void EnumСodeBrainFuckTest(string brainFuckCode)
         {
             // arrange
+            var mockBrainFuckFunction = new Mock<BrainFuckFunction>();
+            var called = false;
+            mockBrainFuckFunction.Setup(x => x.NextCharValue()).Callback(()=> called = true);
+            mockBrainFuckFunction.Setup(x => x.PreviousCharValue()).Callback(() => called = true);
+            mockBrainFuckFunction.Setup(x => x.DisplayCellValue()).Callback(() => called = true);
+            mockBrainFuckFunction.Setup(x => x.NextCell()).Callback(() => called = true);
+            mockBrainFuckFunction.Setup(x => x.PreviusCell()).Callback(() => called = true);
+            mockBrainFuckFunction.Setup(x => x.InputValueInCell()).Callback(() => called = true);
+            mockBrainFuckFunction.Setup(x => x.IfZeroNext(1, brainFuckCode)).Callback(() => called = true);
+            mockBrainFuckFunction.Setup(x => x.IfNoZeroBack(1, brainFuckCode)).Callback(() => called = true);
+
             var brainFuckFunction = new TestBrainFuckFunction();
             var dataOperations = new DataOperations(brainFuckFunction);
             
@@ -247,12 +262,10 @@ namespace BrainFuckTestProject
             // act
             dataOperations.EnumСodeBrainFuck(brainFuckCode);
             var actual = brainFuckFunction.Result;
-            var actualName = brainFuckFunction.Name;
 
 
             // assert
             Assert.True(actual);
-            Assert.Equal(nameExpected, actualName);
         }
 
 
