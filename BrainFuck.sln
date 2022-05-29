@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrainFuck", "BrainFuck\BrainFuck.csproj", "{046F1DDE-8761-45AE-A758-EF6F8A5DED82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainFuckTestProject", "BrainFuckTestProject\BrainFuckTestProject.csproj", "{50E6116D-66A4-4A4F-A75F-700B6DD5B911}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrainFuckTestProject", "BrainFuckTestProject\BrainFuckTestProject.csproj", "{50E6116D-66A4-4A4F-A75F-700B6DD5B911}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
