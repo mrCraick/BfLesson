@@ -1,70 +1,30 @@
-﻿namespace BrainFuck;
+﻿using BrainFuck.BF;
+using BrainFuck.Interfaces.Menus;
+using BrainFuck.IO;
+using BrainFuck.Menus;
+
+namespace BrainFuck;
 
 public static class Program
 {
     public static void Main()
     {
-        var exitToken = new ExitToken();
+        var menu = BuildMenu();
 
-        var menuLines = new[]
-        {
-            new MenuLine("1. Запустить стандартную программу", new DefaultBrainFuckCommand()), 
-            new MenuLine("2. Выйти", new ExitCommand(exitToken))
-        };
-
-        var menuIndex = 0;
-        PrintMenu(menuLines, menuIndex);
-        while (true)
-        {
-            var consoleKeyInfo = Console.ReadKey(true);
-
-            if (consoleKeyInfo.Key == ConsoleKey.UpArrow)
-            {
-                menuIndex -= 1;
-                menuIndex = menuIndex < 0 ? 0 : menuIndex;
-            }
-            else if(consoleKeyInfo.Key == ConsoleKey.DownArrow)
-            {
-                menuIndex += 1;
-                menuIndex = menuIndex >= menuLines.Length ? menuLines.Length - 1 : menuIndex;
-            }
-            else if(consoleKeyInfo.Key == ConsoleKey.Enter)
-            {
-                var item = menuLines[menuIndex];
-                item.Execute();
-                if (exitToken.IsCanceled == false)
-                {
-                   Console.Clear();
-                }
-            }
-
-            if (exitToken.IsCanceled)
-            {
-                return;
-            }
-            
-            PrintMenu(menuLines, menuIndex);
-        }
+        menu.RunMenu();
     }
 
-    private static void PrintMenu(MenuLine[] menuLines, int menuIndex)
+    private static IMenu BuildMenu()
     {
-        Console.SetCursorPosition(0, 0);
-        var index = 0;
-        foreach (var menuLine in menuLines)
-        {
-            if (index == menuIndex)
-            {
-                Console.Write(">");
-            }
-            else
-            {
-                Console.Write(" ");
-            }
+        var consoleCursorWrapper = new ConsoleCursorWrapper();
+        var inputOutput = new InputOutput(Console.In, Console.Out, consoleCursorWrapper);
+        var menuBuilder = new MenuBuilder(inputOutput);
+        var bfInterpretation = new BfInterpretation(inputOutput);
+        menuBuilder
+            .AddNewMenuLine(new MenuLine("Запустить стандартную программу", new DefaultBrainFuckCommand(bfInterpretation)))
+            .AddNewMenuLine(new MenuLine("Ввести программу вручную", new HandelInputBfCodeAndRunCommand(bfInterpretation)))
+            .AddNewMenuLine(new MenuLine("Выйти", new ExitCommand(menuBuilder.ExitToken)));
 
-            Console.Write(menuLine.Name);
-            Console.Write("\n");
-            index += 1;
-        }
+        return menuBuilder.Build();
     }
 }

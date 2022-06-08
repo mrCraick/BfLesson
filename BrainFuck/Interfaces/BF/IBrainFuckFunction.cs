@@ -1,4 +1,4 @@
-﻿namespace BrainFuck;
+﻿namespace BrainFuck.Interfaces.BF;
 
 public interface IBrainFuckFunction
 {

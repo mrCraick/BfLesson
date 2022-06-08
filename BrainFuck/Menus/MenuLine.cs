@@ -1,6 +1,8 @@
-﻿namespace BrainFuck;
+﻿using BrainFuck.Interfaces.Menus;
 
-public sealed class MenuLine
+namespace BrainFuck.Menus;
+
+public sealed class MenuLine : IMenuLine
 {
     private readonly ICommand _command;
 

@@ -1,6 +1,8 @@
-﻿namespace BrainFuck;
+﻿using BrainFuck.Interfaces.BF;
 
-public class DataOperations
+namespace BrainFuck.BF;
+
+public class DataOperations : IDataOperations
 {
     private readonly IBrainFuckFunction _brainFuckFunction;
 

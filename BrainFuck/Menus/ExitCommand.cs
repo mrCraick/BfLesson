@@ -1,4 +1,6 @@
-﻿namespace BrainFuck;
+﻿using BrainFuck.Interfaces.Menus;
+
+namespace BrainFuck.Menus;
 
 public class ExitCommand : ICommand
 {

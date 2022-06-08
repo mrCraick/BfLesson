@@ -1,11 +1,14 @@
-﻿namespace BrainFuck;
+﻿using BrainFuck.Interfaces.BF;
+using BrainFuck.Interfaces.IO;
+
+namespace BrainFuck.BF;
 
 public class BrainFuckFunction : IBrainFuckFunction
 {
     private readonly Repository _dataFromRepository;
-    private readonly InputOutput _inputOutput;
+    private readonly IInputOutput _inputOutput;
 
-    public BrainFuckFunction(Repository dataFromRepository, InputOutput inputOutput)
+    public BrainFuckFunction(Repository dataFromRepository, IInputOutput inputOutput)
     {
         _dataFromRepository = dataFromRepository;
         _inputOutput = inputOutput;

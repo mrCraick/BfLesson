@@ -1,4 +1,4 @@
-﻿namespace BrainFuck;
+﻿namespace BrainFuck.BF;
 
 public class Repository
 {

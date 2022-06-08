@@ -1,4 +1,4 @@
-﻿namespace BrainFuck;
+﻿namespace BrainFuck.Menus;
 
 public class ExitToken
 {
