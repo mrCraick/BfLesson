@@ -6,12 +6,6 @@ public class Repository
     public int Current { get; set; }
     public string Program { get; }
 
-    public Repository() : 
-        this("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.")
-    {
-        
-    }
-
     public Repository(string program)
     {
         Memory = new char[30000];

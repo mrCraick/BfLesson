@@ -21,9 +21,15 @@ public static class Program
         var menuBuilder = new MenuBuilder(inputOutput);
         var bfInterpretation = new BfInterpretation(inputOutput);
         menuBuilder
-            .AddNewMenuLine(new MenuLine("Запустить стандартную программу", new DefaultBrainFuckCommand(bfInterpretation)))
-            .AddNewMenuLine(new MenuLine("Ввести программу вручную", new HandelInputBfCodeAndRunCommand(bfInterpretation)))
-            .AddNewMenuLine(new MenuLine("Выйти", new ExitCommand(menuBuilder.ExitToken)));
+            .AddNewMenuLine(
+                new MenuLine("Запустить стандартную программу", 
+                new DefaultBrainFuckCommand(bfInterpretation)))
+            .AddNewMenuLine(
+                new MenuLine("Ввести программу вручную", 
+                new HandelInputBfCodeAndRunCommand(bfInterpretation)))
+            .AddNewMenuLine(
+                new MenuLine("Выйти", 
+                new ExitCommand(menuBuilder.ExitToken)));
 
         return menuBuilder.Build();
     }
