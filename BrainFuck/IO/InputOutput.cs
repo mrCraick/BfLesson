@@ -10,6 +10,11 @@ public class InputOutput : IInputOutput, IMenuTextWriter
     private readonly TextWriter _writer;
     private readonly ICursorWrapper _cursorWrapper;
 
+    public InputOutput(ICursorWrapper cursorWrapper) : this(Console.In, Console.Out, cursorWrapper)
+    {
+
+    }
+
     public InputOutput(TextReader output, TextWriter input, ICursorWrapper cursorWrapper)
     {
         _reader = output;

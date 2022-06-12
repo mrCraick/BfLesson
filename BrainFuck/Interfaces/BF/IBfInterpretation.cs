@@ -1,4 +1,4 @@
-﻿namespace BrainFuck.Interfaces.BF;
+﻿namespace BrainFuck;
 
 public interface IBfInterpretation
 {
