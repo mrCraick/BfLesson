@@ -33,6 +33,11 @@ public sealed class DebugCommand : ICommand
             {
                 return;
             }
+            else if (keyInfo.Key == ConsoleKey.R)
+            {
+
+                bfCodeDebugOutput.MoveToBFCode();
+            }
         };
     }
 }

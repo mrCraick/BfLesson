@@ -11,8 +11,8 @@ public sealed class BfCodeDebugOutput
     private int GetBfProgramLength => _bfProgram.Length;
     private bool ProgramMoreConsoleLineSize => Console.WindowWidth < GetBfProgramLength;
     private bool CanMoveToNextStep => _index + _offset < GetBfProgramLength - 1;
-    private bool CanMoveCarriageWithBigProgram => ProgramMoreConsoleLineSize && 
-                                                  CanMoveToNextStep && 
+    private bool CanMoveCarriageWithBigProgram => ProgramMoreConsoleLineSize &&
+                                                  CanMoveToNextStep &&
                                                   (Console.WindowWidth / 2 > _index || _offset == GetBfProgramLength - Console.WindowWidth);
 
     private bool CanMoveCarriage => CanMoveCarriageWithBigProgram || CanMoveToNextStep && ProgramMoreConsoleLineSize == false;
@@ -58,7 +58,7 @@ public sealed class BfCodeDebugOutput
             return true;
         }
 
-        if(CanMoveCode)
+        if (CanMoveCode)
         {
             PrintCode();
             return true;
@@ -69,7 +69,7 @@ public sealed class BfCodeDebugOutput
 
     private void PrintCode()
     {
-        Console.SetCursorPosition(0 , 0);
+        Console.SetCursorPosition(0, 0);
         _offset += 1;
 
         for (int i = _offset; i < Console.WindowWidth + _offset && i < GetBfProgramLength - 1; i++)
@@ -86,4 +86,88 @@ public sealed class BfCodeDebugOutput
         Console.Write($"\b {_carriageSymbol}");
         _index += 1;
     }
+
+    public void MoveToBFCode()
+    {
+        Console.Clear();
+        Console.WriteLine("Введите число, для перехода в точку кода: ");
+        int codePoint = Convert.ToInt32(Console.ReadLine());
+        if (codePoint <= Console.WindowWidth / 2 && codePoint > 0)
+        {
+            MoveToStartBFCode(codePoint);
+        }
+
+        else if (codePoint > Console.WindowWidth / 2
+            && codePoint < _bfProgram.Length - Console.WindowWidth / 2) 
+        {
+
+            MoveToTheMiddleBFCode(codePoint);
+        }
+        else if (codePoint >= _bfProgram.Length - Console.WindowWidth / 2)
+        {
+
+            MoveToEndBFCode(codePoint);
+        }
+        else
+        {
+            Console.WriteLine("Запрашиваемая точка вне предела кода.");
+
+        }
+    }
+
+    public void MoveToStartBFCode(int codePoint)
+    {
+        Console.Clear();
+        
+        _offset = codePoint;
+        for (int i = 0; i < Console.WindowWidth; i++)
+        {
+            Console.Write(_bfProgram[i]);
+           
+        }
+        PrintCoursor(codePoint);
+    }
+
+    public void MoveToTheMiddleBFCode(int codePoint)
+    {
+        Console.Clear();
+        
+        _offset = codePoint;
+        for (int i = codePoint - Console.WindowWidth / 2; i < codePoint + Console.WindowWidth / 2; i++)
+        {
+            Console.Write(_bfProgram[i]);
+            
+        }
+        PrintCoursor(Console.WindowWidth / 2);
+
+
+    }
+
+    public void MoveToEndBFCode(int codePoint)
+    {
+        Console.Clear();
+      
+        _offset = codePoint;
+        for (int i = _bfProgram.Length - Console.WindowWidth; i < _bfProgram.Length; i++)
+        {
+            Console.Write(_bfProgram[i]);
+            
+        }
+        PrintCoursor(Console.WindowWidth - (_bfProgram.Length - codePoint));
+    }
+
+    public void PrintCoursor(int codePoint)
+    {
+
+        for (int i = 0; i < codePoint; i++)
+        {
+            Console.Write(' ');
+            
+        }
+        _index = codePoint-1;
+        Console.Write('^');
+    }
+
+
+
 }
