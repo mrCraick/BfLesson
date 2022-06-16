@@ -4,19 +4,10 @@ using BrainFuck.Interfaces.Menus;
 using BrainFuck.IO;
 using BrainFuck.Menus;
 
+//Leshey's_Branch
+
 namespace BrainFuck
 {
-    /* +++-+++---[-]
-     * +++-+++---
-     *     ^
-     * ++-+++---[
-     *     ^
-     * -+++---[-]
-     *      ^
-     * I: 17
-     * 17: 1
-     * 0: 6
-     */
     public static class Program
     {
         public static void Main()
