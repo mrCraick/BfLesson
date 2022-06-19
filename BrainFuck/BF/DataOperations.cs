@@ -12,21 +12,22 @@ public class DataOperations : IDataOperations
         set => _index = value;
     }
 
-    public bool DebugMode { get; set; }
+    public DebugModeSwitch DebugMode { get; set; }
 
 
     private readonly IBrainFuckFunction _brainFuckFunction;
 
-    public DataOperations(IBrainFuckFunction brainFuckFunction, DebugModeSwitch debugModeSwitch)
+    public DataOperations(IBrainFuckFunction brainFuckFunction) : this(brainFuckFunction, new DebugModeSwitch())
     {
-        _brainFuckFunction = brainFuckFunction;
-        DebugMode = debugModeSwitch.Enablded;
+
     }
 
-    public DataOperations(IBrainFuckFunction brainFuckFunction)
+    public DataOperations(IBrainFuckFunction brainFuckFunction, DebugModeSwitch? debugModeSwitch)
     {
         _brainFuckFunction = brainFuckFunction;
+        DebugMode = debugModeSwitch;
     }
+
 
     public void EnumСodeBrainFuck(string brainFuckCode)
     {
@@ -60,7 +61,7 @@ public class DataOperations : IDataOperations
                     break;
             }
 
-            if (DebugMode == false)
+            if (DebugMode.Enablded == false)
             {
                 _index += 1;
             }
