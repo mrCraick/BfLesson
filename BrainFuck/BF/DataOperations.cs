@@ -4,13 +4,12 @@ namespace BrainFuck.BF;
 
 public class DataOperations : IDataOperations
 {
-
     private int _index;
 
     public int Index
     {
         get => _index;
-        set => _index = 0;
+        set => _index = value;
     }
 
     public bool DebugMode { get; set; }
@@ -31,8 +30,6 @@ public class DataOperations : IDataOperations
 
     public void EnumСodeBrainFuck(string brainFuckCode)
     {
-        int indexMem = -1;
-
         for (; _index < brainFuckCode.Length;)
         {
             switch (brainFuckCode[_index])
@@ -69,7 +66,7 @@ public class DataOperations : IDataOperations
             }
             else
             {
-                indexMem = _index;
+                break;
             }
         }
     }
