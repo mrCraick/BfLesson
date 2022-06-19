@@ -4,7 +4,25 @@ namespace BrainFuck.BF;
 
 public class DataOperations : IDataOperations
 {
+
+    private int _index;
+
+    public int Index
+    {
+        get => _index;
+        set => _index = 0;
+    }
+
+    public bool DebugMode { get; set; }
+
+
     private readonly IBrainFuckFunction _brainFuckFunction;
+
+    public DataOperations(IBrainFuckFunction brainFuckFunction, DebugModeSwitch debugModeSwitch)
+    {
+        _brainFuckFunction = brainFuckFunction;
+        DebugMode = debugModeSwitch.Enablded;
+    }
 
     public DataOperations(IBrainFuckFunction brainFuckFunction)
     {
@@ -13,9 +31,11 @@ public class DataOperations : IDataOperations
 
     public void EnumСodeBrainFuck(string brainFuckCode)
     {
-        for (var i = 0; i < brainFuckCode.Length; i++)
+        int indexMem = -1;
+
+        for (; _index < brainFuckCode.Length;)
         {
-            switch (brainFuckCode[i])
+            switch (brainFuckCode[_index])
             {
                 case '+':
                     _brainFuckFunction.NextCharValue();
@@ -36,11 +56,20 @@ public class DataOperations : IDataOperations
                     _brainFuckFunction.InputValueInCell();
                     break;
                 case '[':
-                    i = _brainFuckFunction.IfZeroNext(i, brainFuckCode);
+                    _index = _brainFuckFunction.IfZeroNext(_index, brainFuckCode);
                     break;
                 case ']':
-                    i = _brainFuckFunction.IfNoZeroBack(i, brainFuckCode);
+                    _index = _brainFuckFunction.IfNoZeroBack(_index, brainFuckCode);
                     break;
+            }
+
+            if (DebugMode == false)
+            {
+                _index += 1;
+            }
+            else
+            {
+                indexMem = _index;
             }
         }
     }

@@ -15,7 +15,7 @@ public sealed class DebugCommand : ICommand
     public void Execute()
     {
         Console.Clear();
-        var bfCodeDebugOutput = new BfCodeDebugOutput(_bfProgram); 
+        var bfCodeDebugOutput = new BfCodeDebugOutput(_bfProgram);
         bfCodeDebugOutput.Print();
         while (true)
         {
@@ -24,6 +24,7 @@ public sealed class DebugCommand : ICommand
             if (keyInfo.Key == ConsoleKey.N)
             {
                 var canMoveNext = bfCodeDebugOutput.PrintNextStep();
+                
                 if (canMoveNext == false)
                 {
                     return;
