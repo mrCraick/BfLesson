@@ -92,10 +92,15 @@ public class DebugCommand2 : ICommand
 
 public class DebugModeSwitch
 {
-    private bool _enabled = true;
+    private bool _enabled;
     public bool Enablded 
     {
         get => _enabled;
+    }
+
+    public DebugModeSwitch() : this(false)
+    {
+
     }
 
     public DebugModeSwitch(bool enabled) 
