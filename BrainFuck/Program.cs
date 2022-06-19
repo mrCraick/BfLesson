@@ -100,7 +100,6 @@ public class DebugModeSwitch
 
     public DebugModeSwitch() : this(false)
     {
-
     }
 
     public DebugModeSwitch(bool enabled) 
