@@ -23,7 +23,7 @@ public class DataOperations : IDataOperations
 
     }
 
-    public DataOperations(IBrainFuckFunction brainFuckFunction, DebugModeSwitch? debugModeSwitch)
+    public DataOperations(IBrainFuckFunction brainFuckFunction, DebugModeSwitch debugModeSwitch)
     {
         _brainFuckFunction = brainFuckFunction;
         DebugMode = debugModeSwitch;
