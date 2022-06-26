@@ -39,7 +39,11 @@ public class InputOutput : IInputOutput, IMenuTextWriter
     }
     public void OutputConsole(string messageOrChar)
     {
+        var cursorLeft = Console.CursorLeft;
+        var cursorTop = Console.CursorTop;
+        Console.SetCursorPosition(0, 3);
         _writer.Write(messageOrChar);
+        Console.SetCursorPosition(cursorLeft, cursorTop);
     }
 
     public void PrintMenu(IEnumerable<IMenuLine> menuLines, int selectedMenuIndex)

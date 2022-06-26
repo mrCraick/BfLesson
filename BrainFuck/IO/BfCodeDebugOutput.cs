@@ -87,12 +87,10 @@ public sealed class BfCodeDebugOutput
         _index += 1;
     }
 
-    public void MoveToBFCode()
+    public void MoveToBfCode(int codePoint)
     {
         Console.Clear();
-        Console.WriteLine("Введите число, для перехода в точку кода: ");
-        int codePoint = Convert.ToInt32(Console.ReadLine());
-        if (codePoint <= Console.WindowWidth / 2 && codePoint > 0)
+        if (codePoint <= Console.WindowWidth / 2 && codePoint >= 0)
         {
             MoveToStartBFCode(codePoint);
         }
@@ -110,45 +108,44 @@ public sealed class BfCodeDebugOutput
         }
         else
         {
-            Console.WriteLine("Запрашиваемая точка вне предела кода.");
-
+            throw new IndexOutOfRangeException("Точка находится вне программы");
         }
     }
 
-    public void MoveToStartBFCode(int codePoint)
+    private void MoveToStartBFCode(int codePoint)
     {
         Console.Clear();
         
-        _offset = codePoint;
-        for (int i = 0; i < Console.WindowWidth; i++)
+        _offset = 0;
+        for (int i = 0; i < Console.WindowWidth && i < GetBfProgramLength; i++)
         {
             Console.Write(_bfProgram[i]);
            
         }
+        
         PrintCoursor(codePoint);
     }
 
-    public void MoveToTheMiddleBFCode(int codePoint)
+    private void MoveToTheMiddleBFCode(int codePoint)
     {
         Console.Clear();
-        
-        _offset = codePoint;
-        for (int i = codePoint - Console.WindowWidth / 2; i < codePoint + Console.WindowWidth / 2; i++)
+
+        _offset = codePoint - Console.WindowWidth / 2;
+        for (int i = _offset; i < codePoint + Console.WindowWidth / 2; i++)
         {
             Console.Write(_bfProgram[i]);
             
         }
+        
         PrintCoursor(Console.WindowWidth / 2);
-
-
     }
 
-    public void MoveToEndBFCode(int codePoint)
+    private void MoveToEndBFCode(int codePoint)
     {
         Console.Clear();
       
-        _offset = codePoint;
-        for (int i = _bfProgram.Length - Console.WindowWidth; i < _bfProgram.Length; i++)
+        _offset = _bfProgram.Length - Console.WindowWidth;
+        for (int i = _offset; i < _bfProgram.Length; i++)
         {
             Console.Write(_bfProgram[i]);
             
@@ -156,18 +153,16 @@ public sealed class BfCodeDebugOutput
         PrintCoursor(Console.WindowWidth - (_bfProgram.Length - codePoint));
     }
 
-    public void PrintCoursor(int codePoint)
+    private void PrintCoursor(int codePoint)
     {
+        Console.SetCursorPosition(0, 1);
 
         for (int i = 0; i < codePoint; i++)
         {
             Console.Write(' ');
             
         }
-        _index = codePoint-1;
+        _index = codePoint;
         Console.Write('^');
     }
-
-
-
 }
