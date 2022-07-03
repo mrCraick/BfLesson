@@ -13,6 +13,11 @@ namespace BrainFuck
     {
         public static void Main()
         {
+            //var textBlock1 = new TextBlock(0, 1, Console.WindowWidth);
+            //var textBlock2 = new TextBlock(1, 1, Console.WindowWidth);
+            //var textBlock3 = new TextBlock(2, 1, Console.WindowWidth);
+
+
             var menu = BuildMenu();
             menu.RunMenu();
         }
@@ -50,70 +55,121 @@ namespace BrainFuck
     }
 }
 
-public class DebugCommand2 : ICommand
-{
-    private IBfInterpretation _iBfInterpretation;
-    private readonly string _bfProgram;
+//public class DebugCommand2 : ICommand
+//{
+//    private IBfInterpretation _iBfInterpretation;
+//    private readonly string _bfProgram;
 
-    public DebugCommand2(string bfProgram)
-    {
-        _bfProgram = bfProgram;
-    }
+//    public DebugCommand2(string bfProgram)
+//    {
+//        _bfProgram = bfProgram;
+//    }
 
-    public void Execute()
-    {
-        Console.Clear();
-        var bfCodeDebugOutput = new BfCodeDebugOutput(_bfProgram);
-        bfCodeDebugOutput.Print();
-        while (true)
-        {
-            var keyInfo = Console.ReadKey(true);
+//    public void Execute()
+//    {
+//        Console.Clear();
+//        var bfCodeDebugOutput = new BfCodeDebugOutput(_bfProgram);
+//        bfCodeDebugOutput.Print();
+//        while (true)
+//        {
+//            var keyInfo = Console.ReadKey(true);
 
-            if (keyInfo.Key == ConsoleKey.N)
-            {
-                var canMoveNext = bfCodeDebugOutput.PrintNextStep();
+//            if (keyInfo.Key == ConsoleKey.N)
+//            {
+//                var canMoveNext = bfCodeDebugOutput.PrintNextStep();
 
-                if (canMoveNext == false)
-                {
-                    return;
-                }
-            }
-            else if (keyInfo.Key == ConsoleKey.E)
-            {
-                return;
-            }
-            else if (keyInfo.Key == ConsoleKey.R)
-            {
-                bfCodeDebugOutput.MoveCursorToSpecificPoint();
-            }
-        };
-    }
-}
+//                if (canMoveNext == false)
+//                {
+//                    return;
+//                }
+//            }
+//            else if (keyInfo.Key == ConsoleKey.E)
+//            {
+//                return;
+//            }
+//            else if (keyInfo.Key == ConsoleKey.R)
+//            {
+//                bfCodeDebugOutput.MoveCursorToSpecificPoint();
+//            }
+//        };
+//    }
+//}
 
-public class DebugModeSwitch
-{
-    private bool _enabled;
-    public bool Enablded 
-    {
-        get => _enabled;
-    }
+//public class DebugModeSwitch
+//{
+//    private bool _enabled;
+//    public bool Enablded 
+//    {
+//        get => _enabled;
+//    }
 
-    public DebugModeSwitch() : this(false)
-    {
-    }
+//    public DebugModeSwitch() : this(false)
+//    {
+//    }
 
-    public DebugModeSwitch(bool enabled) 
-    {
-        _enabled = enabled;
-    }
+//    public DebugModeSwitch(bool enabled) 
+//    {
+//        _enabled = enabled;
+//    }
 
-    public void Enable()
-    {
-        _enabled = true;
-    }
+//    public void Enable()
+//    {
+//        _enabled = true;
+//    }
 
-    public void Disable()
-    {
-        _enabled = false;
-    }
-}
+//    public void Disable()
+//    {
+//        _enabled = false;
+//    }
+//}
+
+//public class TextBlock
+//{
+//    private readonly int _lineCountSymbols;
+    
+//    public string Content { get; private set; }
+//    public int Order { get; }
+//    public int CountOfLines { get; }
+
+//    private int MaxContentLenght => CountOfLines * _lineCountSymbols;
+
+//    public TextBlock(int order, int sizeLine, int lineCountSymbols)
+//    {
+//        Order = order;
+//        CountOfLines = sizeLine;
+//        _lineCountSymbols = lineCountSymbols;
+//    }
+
+//    public void SetContent(string value)
+//    {
+//        if (value.Length > MaxContentLenght)
+//        {
+//            throw new ArgumentException($"Текст слишком большой, ожидается не более {MaxContentLenght}, а пришло {value.Length}");
+//        }
+
+//        Content = value;
+//    }
+
+//}
+
+//public class TextRender
+//{
+//    private TextBlock[] _textBlocks;
+
+//    public TextRender(TextBlock[] textBoxes)
+//    {
+//        _textBlocks = textBoxes;
+//    }
+
+//    public void Render()
+//    {
+//        for (var i = 0; i < _textBlocks.Length; i++)
+//        {
+//            Console.SetCursorPosition(0, _textBlocks[i].Order);
+//            Console.Write(_textBlocks[i].Content);
+//        }
+//    }
+
+
+//}
+

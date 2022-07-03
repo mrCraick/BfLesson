@@ -2,5 +2,5 @@
 
 public interface IDataOperations
 {
-    void EnumСodeBrainFuck(string brainFuckCode);
+    void RunСodeBrainFuck(string brainFuckCode);
 }

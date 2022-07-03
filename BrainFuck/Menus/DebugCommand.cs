@@ -6,6 +6,7 @@ namespace BrainFuck.Menus;
 public sealed class DebugCommand : ICommand
 {
     private readonly string _bfProgram;
+    private readonly string _dataOperations;
 
     public DebugCommand(string bfProgram)
     {
