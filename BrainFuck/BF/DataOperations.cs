@@ -13,10 +13,7 @@ public class DataOperations : IDataOperations
 
     public void EnumСodeBrainFuck(string brainFuckCode)
     {
-        for (var i = 0; i < brainFuckCode.Length; i++)
-        {
-            i = ExecuteOneSymbol(brainFuckCode, i);
-        }
+        for (var i = 0; i < brainFuckCode.Length; i++) i = ExecuteOneSymbol(brainFuckCode, i);
     }
 
     public int ExecuteOneSymbol(string brainFuckCode, int i)

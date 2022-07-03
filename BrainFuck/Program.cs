@@ -2,22 +2,9 @@
 using BrainFuck.Interfaces.Menus;
 using BrainFuck.IO;
 using BrainFuck.Menus;
+
 namespace BrainFuck;
 
-
-
-
-/* +++-+++---[-]
- * +++-+++---
- *     ^
- * ++-+++---[
- *     ^
- * -+++---[-]
- *      ^
- * I: 17
- * 17: 1
- * 0: 6
- */
 public static class Program
 {
     public static void Main()
@@ -32,7 +19,9 @@ public static class Program
         var inputOutput = new InputOutput(consoleCursorWrapper);
         var menuBuilder = new MenuBuilder(inputOutput);
         var bfInterpretation = new BfInterpretation(inputOutput);
-        var dataFromRepository = new Repository("++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>>----------.+++++++.<+++++++++++++.>+++++++.---.++++++.++++++++++.");
+        var dataFromRepository =
+            new Repository(
+                "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>>----------.+++++++.<+++++++++++++.>+++++++.---.++++++.++++++++++.");
         var brainFuckFunction = new BrainFuckFunction(dataFromRepository, inputOutput);
         var dataOperations = new DataOperations(brainFuckFunction);
         menuBuilder
@@ -50,9 +39,9 @@ public static class Program
                     new ExitCommand(menuBuilder.ExitToken))
             )
             .AddNewMenuLine(
-            new MenuLine(
-                "мне не понравилось предыдущее название, вот так гораздо лучше",
-                new DebugCommand(dataFromRepository, dataOperations)));
+                new MenuLine(
+                    "мне не понравилось предыдущее название, вот так гораздо лучше",
+                    new DebugCommand(dataFromRepository, dataOperations)));
         return menuBuilder.Build();
     }
 }

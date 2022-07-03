@@ -16,6 +16,7 @@ internal sealed class MenuBuilder : IMenuBuilder
 
         ExitToken = new ExitToken();
     }
+
     public IMenuBuilder AddNewMenuLine(IMenuLine newMenuLine)
     {
         _menuLines.Add(newMenuLine);

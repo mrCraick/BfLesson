@@ -1,6 +1,4 @@
-﻿using BrainFuck.Menus;
-
-namespace BrainFuck.Interfaces.Menus;
+﻿namespace BrainFuck.Interfaces.Menus;
 
 public interface IMenuTextWriter
 {

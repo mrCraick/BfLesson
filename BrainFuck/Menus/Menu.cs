@@ -17,7 +17,6 @@ public class Menu : IMenu
 
     public void RunMenu()
     {
-
         var menuIndex = 0;
 
         _menuTextWriter.PrintMenu(_menuLines, menuIndex);
@@ -40,16 +39,10 @@ public class Menu : IMenu
             {
                 var item = _menuLines[menuIndex];
                 item.Execute();
-                if (_exitToken.IsCanceled == false)
-                {
-                    Console.Clear();
-                }
+                if (_exitToken.IsCanceled == false) Console.Clear();
             }
 
-            if (_exitToken.IsCanceled)
-            {
-                return;
-            }
+            if (_exitToken.IsCanceled) return;
 
             _menuTextWriter.PrintMenu(_menuLines, menuIndex);
         }

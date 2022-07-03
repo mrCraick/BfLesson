@@ -29,20 +29,14 @@ public class BrainFuckFunction : IBrainFuckFunction
         _inputOutput.OutputConsole(Convert.ToString(_dataFromRepository.Memory[_dataFromRepository.Current]));
     }
 
-    public virtual void NextCell() 
+    public virtual void NextCell()
     {
-        if (_dataFromRepository.Current < _dataFromRepository.Memory.Length)
-        {
-            _dataFromRepository.Current += 1;
-        }
+        if (_dataFromRepository.Current < _dataFromRepository.Memory.Length) _dataFromRepository.Current += 1;
     }
 
     public virtual void PreviousCell()
     {
-        if (_dataFromRepository.Current > 0)
-        {
-            _dataFromRepository.Current -= 1;
-        }
+        if (_dataFromRepository.Current > 0) _dataFromRepository.Current -= 1;
     }
 
     public virtual void InputValueInCell()
@@ -58,15 +52,9 @@ public class BrainFuckFunction : IBrainFuckFunction
             while (numberOfOpenBrackets != 0)
             {
                 positionNumber++;
-                if (brainFuckCode[positionNumber] == '[')
-                {
-                    numberOfOpenBrackets++;
-                }
+                if (brainFuckCode[positionNumber] == '[') numberOfOpenBrackets++;
 
-                if (brainFuckCode[positionNumber] == ']')
-                {
-                    numberOfOpenBrackets--;
-                }
+                if (brainFuckCode[positionNumber] == ']') numberOfOpenBrackets--;
             }
         }
 
@@ -81,15 +69,9 @@ public class BrainFuckFunction : IBrainFuckFunction
             while (numberOfOpenBrackets != 0)
             {
                 positionNumber--;
-                if (brainFuckCode[positionNumber] == ']')
-                {
-                    numberOfOpenBrackets++;
-                }
+                if (brainFuckCode[positionNumber] == ']') numberOfOpenBrackets++;
 
-                if (brainFuckCode[positionNumber] == '[')
-                {
-                    numberOfOpenBrackets--;
-                }
+                if (brainFuckCode[positionNumber] == '[') numberOfOpenBrackets--;
             }
         }
 

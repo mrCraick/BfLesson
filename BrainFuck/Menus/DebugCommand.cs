@@ -20,9 +20,9 @@ public sealed class DebugCommand : ICommand
     {
         Console.Clear();
         var program = _repository.Program;
-        var bfCodeDebugOutput = new BfCodeDebugOutput(program); 
+        var bfCodeDebugOutput = new BfCodeDebugOutput(program);
         bfCodeDebugOutput.Print();
-        int index = 0;
+        var index = 0;
         while (true)
         {
             var keyInfo = Console.ReadKey(true);
@@ -31,21 +31,14 @@ public sealed class DebugCommand : ICommand
             {
                 var oldIndex = index;
                 index = _dataOperations.ExecuteOneSymbol(program, index);
-                bool canMoveNext = true;
+                var canMoveNext = true;
 
                 if (oldIndex == index)
-                {
                     canMoveNext = bfCodeDebugOutput.PrintNextStep();
-                }
                 else
-                {
                     bfCodeDebugOutput.MoveToBfCode(index);
-                }
-                
-                if (canMoveNext == false)
-                {
-                    return;
-                }
+
+                if (canMoveNext == false) return;
 
                 index += 1;
             }
@@ -53,6 +46,8 @@ public sealed class DebugCommand : ICommand
             {
                 return;
             }
-        };
+        }
+
+        ;
     }
 }

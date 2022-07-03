@@ -1,6 +1,4 @@
 ﻿using System.Text;
-using BrainFuck.BF;
-using BrainFuck.Interfaces.BF;
 using BrainFuck.Interfaces.Menus;
 
 namespace BrainFuck.Menus;
@@ -47,7 +45,7 @@ public class HandelInputBfCodeAndRunCommand : ICommand
                 Console.WriteLine("\nBloody bastard!");
                 _stringBuilder.Clear();
             }
-            else if(consoleKeyInfo.Key == ConsoleKey.Backspace)
+            else if (consoleKeyInfo.Key == ConsoleKey.Backspace)
             {
                 if (_stringBuilder.Length != 0)
                 {
@@ -63,20 +61,11 @@ public class HandelInputBfCodeAndRunCommand : ICommand
         var balance = 0;
 
         foreach (var item in program)
-        {
             if (item == '[')
-            {
                 balance += 1;
-            }
-            else if(item == ']' && balance <= 0)
-            {
+            else if (item == ']' && balance <= 0)
                 return false;
-            }
-            else if(item == ']')
-            {
-                balance -= 1;
-            }
-        }
+            else if (item == ']') balance -= 1;
 
         return balance == 0;
     }

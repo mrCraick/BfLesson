@@ -1,7 +1,4 @@
-﻿using BrainFuck.BF;
-using BrainFuck.Interfaces.BF;
-using BrainFuck.Interfaces.IO;
-using BrainFuck.Interfaces.Menus;
+﻿using BrainFuck.Interfaces.Menus;
 
 namespace BrainFuck.Menus;
 

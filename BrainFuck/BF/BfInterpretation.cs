@@ -1,5 +1,4 @@
-﻿using BrainFuck.Interfaces.BF;
-using BrainFuck.Interfaces.IO;
+﻿using BrainFuck.Interfaces.IO;
 
 namespace BrainFuck.BF;
 
@@ -14,7 +13,8 @@ public class BfInterpretation : IBfInterpretation
 
     public void Run()
     {
-        Run("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.");
+        Run(
+            "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.");
     }
 
     public void Run(string program)
