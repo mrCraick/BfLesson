@@ -1,7 +1,15 @@
-﻿namespace BrainFuck.IO;
+﻿using BrainFuck.Interfaces.IO;
+using System.Text;
+
+namespace BrainFuck.IO;
 
 public sealed class BfCodeDebugOutput
 {
+    private readonly IWindowSetting _windowSetting;
+
+    private readonly StringBuilder _codeStringBuilder;
+    private readonly StringBuilder _carriageStringBuilder;
+
     private readonly string _bfProgram;
     private readonly char _carriageSymbol;
 
@@ -9,45 +17,33 @@ public sealed class BfCodeDebugOutput
     private int _offset;
 
     private int GetBfProgramLength => _bfProgram.Length;
-    private bool ProgramMoreConsoleLineSize => Console.WindowWidth < GetBfProgramLength;
+    private bool ProgramMoreConsoleLineSize => _windowSetting.WindowWidth < GetBfProgramLength;
     private bool CanMoveToNextStep => _index + _offset < GetBfProgramLength - 1;
-
     private bool CanMoveCarriageWithBigProgram => ProgramMoreConsoleLineSize &&
                                                   CanMoveToNextStep &&
-                                                  (Console.WindowWidth / 2 > _index ||
-                                                   _offset == GetBfProgramLength - Console.WindowWidth);
+                                                  (HalfWindowWidth > _index ||
+                                                   _offset == GetBfProgramLength - _windowSetting.WindowWidth);
 
     private bool CanMoveCarriage =>
         CanMoveCarriageWithBigProgram || CanMoveToNextStep && ProgramMoreConsoleLineSize == false;
 
     private bool CanMoveCode => ProgramMoreConsoleLineSize && CanMoveToNextStep;
 
+    private int HalfWindowWidth => _windowSetting.WindowWidth / 2;
 
-    public BfCodeDebugOutput(string bfProgram) : this(bfProgram, '^')
+    public BfCodeDebugOutput(string bfProgram, IWindowSetting windowSetting) : this(bfProgram, '^', windowSetting)
     {
     }
 
-    public BfCodeDebugOutput(string bfProgram, char carriageSymbol)
+    public BfCodeDebugOutput(string bfProgram, char carriageSymbol, IWindowSetting windowSetting)
     {
         _index = 0;
         _offset = -1;
         _bfProgram = bfProgram;
         _carriageSymbol = carriageSymbol;
-    }
-
-    public void Print()
-    {
-        Print(0);
-    }
-
-    public void Print(int startIndex)
-    {
-        PrintCode();
-
-        for (var i = 0; i < startIndex; i++) Console.Write(' ');
-
-        Console.Write(_carriageSymbol);
-        _index = startIndex;
+        _windowSetting = windowSetting;
+        _codeStringBuilder = new StringBuilder();
+        _carriageStringBuilder = new StringBuilder();
     }
 
     public bool PrintNextStep()
@@ -60,81 +56,117 @@ public sealed class BfCodeDebugOutput
 
         if (CanMoveCode)
         {
-            PrintCode();
+            MoveCode();
             return true;
         }
 
         return false;
     }
 
-    private void PrintCode()
+    public void MoveToBfCode()
     {
-        Console.SetCursorPosition(0, 0);
-        _offset += 1;
-
-        for (var i = _offset; i < Console.WindowWidth + _offset && i < GetBfProgramLength - 1; i++)
-            Console.Write(_bfProgram[i]);
-
-        Console.Write("\n");
-        Console.SetCursorPosition(_index, 1);
-    }
-
-    private void MoveCarriageSymbol()
-    {
-        Console.Write($"\b {_carriageSymbol}");
-        _index += 1;
+        MoveToBfCode(0);
     }
 
     public void MoveToBfCode(int codePoint)
     {
-        Console.Clear();
-        if (codePoint <= Console.WindowWidth / 2 && codePoint >= 0)
+        if (codePoint <= HalfWindowWidth && codePoint >= 0)
+        {
             MoveToStartBFCode(codePoint);
-
-        else if (codePoint > Console.WindowWidth / 2
-                 && codePoint < _bfProgram.Length - Console.WindowWidth / 2)
+        }
+        else if (codePoint > HalfWindowWidth
+                 && codePoint < _bfProgram.Length - HalfWindowWidth)
+        {
             MoveToTheMiddleBFCode(codePoint);
-        else if (codePoint >= _bfProgram.Length - Console.WindowWidth / 2)
+        }
+        else if (codePoint >= _bfProgram.Length - HalfWindowWidth)
+        {
             MoveToEndBFCode(codePoint);
+        }
         else
+        {
             throw new IndexOutOfRangeException("Точка находится вне программы");
+        }
+    }
+
+    public string GetContent()
+    {
+        var contentStringBuilder = new StringBuilder();
+
+        contentStringBuilder.AppendLine(_codeStringBuilder.ToString());
+        contentStringBuilder.AppendLine(_carriageStringBuilder.ToString());
+
+        return contentStringBuilder.ToString();
+    }
+
+    private void MoveCode()
+    {
+        var newOffset = _offset + 1;
+        var newIndex = _index;
+
+        UpdateContent(newOffset, newIndex);
+    }
+
+    private void MoveCarriageSymbol()
+    {
+        var newOffset = _offset;
+        var newIndex = _index + 1;
+
+        UpdateContent(newOffset, newIndex);
     }
 
     private void MoveToStartBFCode(int codePoint)
     {
-        Console.Clear();
+        var newOffset = 0;
+        var newIndex = codePoint;
 
-        _offset = 0;
-        for (var i = 0; i < Console.WindowWidth && i < GetBfProgramLength; i++) Console.Write(_bfProgram[i]);
-
-        PrintCoursor(codePoint);
+        UpdateContent(newOffset, newIndex);
     }
 
     private void MoveToTheMiddleBFCode(int codePoint)
     {
-        Console.Clear();
+        var newOffset = codePoint - HalfWindowWidth;
+        var newIndex = HalfWindowWidth;
 
-        _offset = codePoint - Console.WindowWidth / 2;
-        for (var i = _offset; i < codePoint + Console.WindowWidth / 2; i++) Console.Write(_bfProgram[i]);
-
-        PrintCoursor(Console.WindowWidth / 2);
+        UpdateContent(newOffset, newIndex);
     }
 
     private void MoveToEndBFCode(int codePoint)
     {
-        Console.Clear();
+        var newOffset = _bfProgram.Length - _windowSetting.WindowWidth;
+        var newIndex = _windowSetting.WindowWidth - (_bfProgram.Length - codePoint);
 
-        _offset = _bfProgram.Length - Console.WindowWidth;
-        for (var i = _offset; i < _bfProgram.Length; i++) Console.Write(_bfProgram[i]);
-        PrintCoursor(Console.WindowWidth - (_bfProgram.Length - codePoint));
+        UpdateContent(newOffset, newIndex);
     }
 
-    private void PrintCoursor(int codePoint)
+    private void UpdateContent(int newOffset, int newIndex)
     {
-        Console.SetCursorPosition(0, 1);
+        _offset = newOffset;
+        _index = newIndex;
 
-        for (var i = 0; i < codePoint; i++) Console.Write(' ');
-        _index = codePoint;
-        Console.Write('^');
+        UpdateCodeStringBuilder();
+        UpdateCarriageStringBuilder();
+    }
+
+    private void UpdateCodeStringBuilder()
+    {
+        _codeStringBuilder.Clear();
+
+        for (var i = _offset; i < GetBfProgramLength && i < _windowSetting.WindowWidth + _offset; i++)
+        {
+            _codeStringBuilder.Append(_bfProgram[i]);
+        }
+    }
+
+    private void UpdateCarriageStringBuilder()
+    {
+        _carriageStringBuilder.Clear();
+
+        for (var i = 0; i < _index; i++)
+        {
+            _carriageStringBuilder.Append(' ');
+        }
+
+        _carriageStringBuilder.Append(_carriageSymbol);
     }
 }
