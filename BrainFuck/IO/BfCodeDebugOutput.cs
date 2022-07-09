@@ -3,8 +3,10 @@ using System.Text;
 
 namespace BrainFuck.IO;
 
-public sealed class BfCodeDebugOutput
+public sealed class BfCodeDebugOutput : IContentProvider
 {
+    public const char DEFAULT_CARRIAGE_SYMBOL = '^';
+
     private readonly IWindowSetting _windowSetting;
 
     private readonly StringBuilder _codeStringBuilder;
@@ -31,7 +33,7 @@ public sealed class BfCodeDebugOutput
 
     private int HalfWindowWidth => _windowSetting.WindowWidth / 2;
 
-    public BfCodeDebugOutput(string bfProgram, IWindowSetting windowSetting) : this(bfProgram, '^', windowSetting)
+    public BfCodeDebugOutput(string bfProgram, IWindowSetting windowSetting) : this(bfProgram, DEFAULT_CARRIAGE_SYMBOL, windowSetting)
     {
     }
 

@@ -21,11 +21,10 @@ public sealed class DebugCommand : ICommand
         Console.Clear();
         var program = _repository.Program;
         var bfCodeDebugOutput = new BfCodeDebugOutput(program, new ConsoleWindowSetting());
+        var textRender = new TextRender(new[] { bfCodeDebugOutput });
 
         bfCodeDebugOutput.MoveToBfCode();
-        var content = bfCodeDebugOutput.GetContent();
-        Console.Clear();
-        Console.Write(content);
+        textRender.RenderAll();
 
         var index = 0;
         while (true)
@@ -52,9 +51,7 @@ public sealed class DebugCommand : ICommand
                     return;
                 }
 
-                content = bfCodeDebugOutput.GetContent();
-                Console.Clear();
-                Console.Write(content);
+                textRender.RenderAll();
 
                 index += 1;
             }
@@ -63,7 +60,5 @@ public sealed class DebugCommand : ICommand
                 return;
             }
         }
-
-        ;
     }
 }

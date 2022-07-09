@@ -1,39 +1,29 @@
-﻿using System.Collections.ObjectModel;
+﻿using BrainFuck.Interfaces.IO;
 
 namespace BrainFuck.IO;
 
-public class TextBox
-{
-    public string? Content { get; private set; }
-
-    public void SetContent(string value)
-    {
-        Content = value;
-    }
-}
-
 public class TextRender
 {
-    private readonly IReadOnlyList<TextBox> _textBoxes;
+    private readonly IReadOnlyList<IContentProvider> _contentProviders;
 
-    public TextRender(IEnumerable<TextBox> textBoxes)
+    public TextRender(IEnumerable<IContentProvider> contentProviders)
     {
-        _textBoxes = new List<TextBox>(textBoxes).AsReadOnly();
+        _contentProviders = new List<IContentProvider>(contentProviders).AsReadOnly();
     }
 
     public void RenderAll()
     {
         Console.SetCursorPosition(0, 0);
         Console.Clear();
-        for (var i = 0; i < _textBoxes.Count; i++)
+
+        for (var i = 0; i < _contentProviders.Count; i++)
         {
             RenderCell(i);
-            Console.Write('\n');
         }
     }
 
     public void RenderCell(int i)
     {
-        Console.Write(_textBoxes[i].Content);
+        Console.Write(_contentProviders[i].GetContent());
     }
 }
